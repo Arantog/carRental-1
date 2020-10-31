@@ -32,6 +32,11 @@ public class UpdateMenu {
                 new NewCustomerMenu();
             }
         });
+        newCar.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                new NewCarMenu();
+            }
+        });
 
 
         f.add(newCustomer);

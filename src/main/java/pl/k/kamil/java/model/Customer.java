@@ -23,22 +23,32 @@ public class Customer {
     @Column
     private String lastName;
 
-    @Embedded
-    private Address address;
+    @Column(name = "street")
+    private String street;
+
+    @Column(name="house_number")
+    private String houseNumber;
+
+
+    @Column(name="city")
+    private String city;
+
+    @Column(name="postal_code")
+    private String postalCode;
+
+
 
 
     public Customer() {
     }
 
-    public Customer(String firstName, String lastName) {
+    public Customer(String firstName, String lastName, String street, String houseNumber, String city, String postalCode) {
         this.firstName = firstName;
         this.lastName = lastName;
-    }
-
-    public Customer(String firstName, String lastName, Address address) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
+        this.street = street;
+        this.houseNumber = houseNumber;
+        this.city = city;
+        this.postalCode = postalCode;
     }
 
     public int getId() {
@@ -65,37 +75,35 @@ public class Customer {
         this.lastName = lastName;
     }
 
-    public Address getAddress() {
-        return address;
+    public String getStreet() {
+        return street;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Customer customer = (Customer) o;
-        return id == customer.id &&
-                Objects.equals(firstName, customer.firstName) &&
-                Objects.equals(lastName, customer.lastName) &&
-                Objects.equals(address, customer.address);
+    public String getHouseNumber() {
+        return houseNumber;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstName, lastName, address);
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
     }
 
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", address=" + address +
-                '}';
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 }

@@ -1,9 +1,8 @@
 package pl.k.kamil.java.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.Objects;
 
 
@@ -25,18 +24,23 @@ public class Car {
     @Column (name = "color")
     private String color;
 
-    @Column (name = "condition")
-    private boolean condition;
+    @Column (name = "price")
+    private BigDecimal price;
+
+    @Column (name = "free")
+    private String free;
+
 
     public Car() {
     }
 
-    public Car(String regNumber, String mark, String model, String color, boolean condition) {
+    public Car(String regNumber, String mark, String model, String color, BigDecimal price, String free) {
         this.regNumber = regNumber;
         this.mark = mark;
         this.model = model;
         this.color = color;
-        this.condition = condition;
+        this.price = price;
+        this.free = free;
     }
 
     public String getRegNumber() {
@@ -71,12 +75,20 @@ public class Car {
         this.color = color;
     }
 
-    public boolean isCondition() {
-        return condition;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setCondition(boolean condition) {
-        this.condition = condition;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getFree() {
+        return free;
+    }
+
+    public void setFree(String free) {
+        this.free = free;
     }
 
     @Override
@@ -84,16 +96,17 @@ public class Car {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return condition == car.condition &&
-                Objects.equals(regNumber, car.regNumber) &&
+        return Objects.equals(regNumber, car.regNumber) &&
                 Objects.equals(mark, car.mark) &&
                 Objects.equals(model, car.model) &&
-                Objects.equals(color, car.color);
+                Objects.equals(color, car.color) &&
+                Objects.equals(price, car.price) &&
+                Objects.equals(free, car.free);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(regNumber, mark, model, color, condition);
+        return Objects.hash(regNumber, mark, model, color, price, free);
     }
 
     @Override
@@ -103,9 +116,8 @@ public class Car {
                 ", mark='" + mark + '\'' +
                 ", model='" + model + '\'' +
                 ", color='" + color + '\'' +
-                ", condition=" + condition +
+                ", price=" + price +
+                ", free='" + free + '\'' +
                 '}';
     }
-
-
 }

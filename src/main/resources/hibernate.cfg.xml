@@ -12,8 +12,9 @@
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
 
-        <mapping class="pl.k.kamil.java.model.Car"/>
+
         <mapping class="pl.k.kamil.java.model.Customer"/>
         <mapping class="pl.k.kamil.java.model.Rent"/>
-    </session-factory>
+        <mapping class="pl.k.kamil.java.model.Car"/>
+          </session-factory>
 </hibernate-configuration>
