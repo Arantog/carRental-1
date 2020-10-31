@@ -3,6 +3,7 @@ package pl.k.kamil.java.dao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pl.k.kamil.java.database.SessionProvider;
+import pl.k.kamil.java.model.Customer;
 
 import java.util.List;
 
@@ -13,8 +14,6 @@ public abstract class AbstractDao<T> {
     protected AbstractDao(Class<T> clazz) {
         this.clazz = clazz;
     }
-
-
 
 
     public T findById(int id) {
@@ -56,3 +55,5 @@ public abstract class AbstractDao<T> {
         session.close();
     }
 }
+
+

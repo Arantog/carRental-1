@@ -8,10 +8,10 @@ import java.util.Objects;
 public class Address {
 
     @Column(name = "street")
-    private String firstName;
+    private String street;
 
     @Column(name="house_number")
-    private int houseNumber;
+    private String houseNumber;
 
 
     @Column(name="city")
@@ -23,26 +23,26 @@ public class Address {
     public Address() {
     }
 
-    public Address(String firstName, int houseNumber, String city, String postalCode) {
-        this.firstName = firstName;
+    public Address(String street, String houseNumber, String city, String postalCode) {
+        this.street = street;
         this.houseNumber = houseNumber;
         this.city = city;
         this.postalCode = postalCode;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getStreet() {
+        return street;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setStreet(String street) {
+        this.street = street;
     }
 
-    public int getHouseNumber() {
+    public String getHouseNumber() {
         return houseNumber;
     }
 
-    public void setHouseNumber(int houseNumber) {
+    public void setHouseNumber(String houseNumber) {
         this.houseNumber = houseNumber;
     }
 
@@ -68,20 +68,20 @@ public class Address {
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
         return houseNumber == address.houseNumber &&
-                Objects.equals(firstName, address.firstName) &&
+                Objects.equals(street, address.street) &&
                 Objects.equals(city, address.city) &&
                 Objects.equals(postalCode, address.postalCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, houseNumber, city, postalCode);
+        return Objects.hash(street, houseNumber, city, postalCode);
     }
 
     @Override
     public String toString() {
         return "Address{" +
-                "firstName='" + firstName + '\'' +
+                "firstName='" + street + '\'' +
                 ", houseNumber=" + houseNumber +
                 ", city='" + city + '\'' +
                 ", postalCode='" + postalCode + '\'' +
