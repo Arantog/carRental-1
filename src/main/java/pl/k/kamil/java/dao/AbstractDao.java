@@ -3,7 +3,6 @@ package pl.k.kamil.java.dao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import pl.k.kamil.java.database.SessionProvider;
-import pl.k.kamil.java.model.Customer;
 
 import java.util.List;
 
@@ -54,6 +53,16 @@ public abstract class AbstractDao<T> {
         transaction.commit();
         session.close();
     }
+
+    public void deleteById(int id) {
+        Session session = SessionProvider.getSession();
+        Transaction transaction = session.beginTransaction();
+        session.delete(session.find(clazz, id));
+        transaction.commit();
+        session.close();
+    }
+
+
 }
 
 

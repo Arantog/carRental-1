@@ -1,47 +1,111 @@
 package pl.k.kamil.java.menu;
+
+import pl.k.kamil.java.logic.SearchLogic;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SearchMenu {
 
-    SearchMenu(){
-        JFrame f=new JFrame("Wszyscy klienci");
-        final JTextField tf=new JTextField();
+public class SearchMenu extends JFrame {
 
+        private JButton customer;
+        private JLabel jLabel1;
+        private JButton car;
+        private JButton rent;
 
-        JButton allCustomers=new JButton("Wszyscy klienci");
-        allCustomers.setBounds(50,200,200,30);
-
-        JButton allCars =new JButton("Wszystkie samochody");
-        allCars.setBounds(250,200,200,30);
-
-        JButton allRents =new JButton("Wszystkie wypożyczenia");
-        allRents.setBounds(450,200,200,30);
-
-        JButton freeCars =new JButton("Wszystkie wypożyczenia");
-        freeCars.setBounds(450,200,200,30);
+        public SearchMenu() {
+            initComponents();
+        }
 
 
-        allCustomers.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-              new SearchAllCustomer();
-            }
-        });
+
+        private void initComponents() {
+
+            car = new JButton();
+            customer = new JButton();
+            rent = new JButton();
+            jLabel1 = new JLabel();
+
+            setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+            setTitle("Wyszukiwanie edycja");
+
+            car.setText("Samochody");
+            car.addActionListener(new ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    carActionPerformed(evt);
+                }
+            });
+
+            customer.setText("Klienci");
+            customer.addActionListener(new ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    customerActionPerformed(evt);
+                }
+            });
+
+            rent.setText("Wypożyczenia");
+            rent.addActionListener(new ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    rentEditActionPerformed(evt);
+                }
+            });
+
+            jLabel1.setFont(new java.awt.Font("Tahoma", 0, 20));
+            jLabel1.setText("Wyszukiwanie /dodawanie nowych / Edycja");
+
+            GroupLayout layout = new GroupLayout(getContentPane());
+            getContentPane().setLayout(layout);
+            layout.setHorizontalGroup(
+                    layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                    .addGap(101, 101, 101)
+                                                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                            .addComponent(rent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addComponent(customer, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addComponent(car, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addGroup(layout.createSequentialGroup()
+                                                    .addGap(134, 134, 134)
+                                                    .addComponent(jLabel1)))
+                                    .addContainerGap(168, Short.MAX_VALUE))
+            );
+            layout.setVerticalGroup(
+                    layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                    .addGap(34, 34, 34)
+                                    .addComponent(jLabel1)
+                                    .addGap(62, 62, 62)
+                                    .addComponent(car)
+                                    .addGap(49, 49, 49)
+                                    .addComponent(customer)
+                                    .addGap(59, 59, 59)
+                                    .addComponent(rent)
+                                    .addContainerGap(99, Short.MAX_VALUE))
+            );
+
+            pack();
+        }
 
 
-        f.add(allCustomers);
-        f.add(allCars);
-        f.add(allRents);
-        f.add(freeCars);
 
+        private void carActionPerformed(ActionEvent evt) {
+            new SearchAll(new SearchLogic().allCarTable()).setVisible(true);
 
-        f.add(tf);
-        f.setSize(1000,400);
-        f.setLayout(null);
-        f.setVisible(true);
+        }
+
+        private void customerActionPerformed(ActionEvent evt) {
+            new SearchAll(new SearchLogic().allCustomerTable()).setVisible(true);
+        }
+
+        private void rentEditActionPerformed(ActionEvent evt) {
+            new SearchAll(new SearchLogic().allCarTable()).setVisible(true);
+        }
 
 
 
     }
-}
+
+

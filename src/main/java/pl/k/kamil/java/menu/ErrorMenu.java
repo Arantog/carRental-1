@@ -6,7 +6,7 @@ public class ErrorMenu {
 
     public  void emptyJTextField(){
         JFrame f=new JFrame();
-        JOptionPane.showMessageDialog(f, "Pola nie mogą byś puste", "Uwaga", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(f, "Pola nie mogą być puste", "Uwaga", JOptionPane.WARNING_MESSAGE);
 
     }
 
