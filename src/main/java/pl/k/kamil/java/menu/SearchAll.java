@@ -1,52 +1,54 @@
 package pl.k.kamil.java.menu;
 
 
+import pl.k.kamil.java.dao.CarDao;
+import pl.k.kamil.java.dao.CustomerDao;
+import pl.k.kamil.java.logic.SearchLogic;
+import pl.k.kamil.java.logic.ToUpdateEdit;
+
 import javax.swing.*;
 import javax.swing.table.TableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class SearchAll extends JFrame {
 
-    private JButton jButton1;
-    private JButton jButton2;
-    private JButton jButton3;
-    private JScrollPane jScrollPane1;
     private JTable jTable1;
 
 
-    public SearchAll(TableModel tableModel) {
-        initComponents(tableModel);
+    public SearchAll(TableModel tableModel, ToUpdateEdit toUpdateEdit) {
+        initComponents(tableModel, toUpdateEdit);
     }
 
 
+    private void initComponents(TableModel tableModel, ToUpdateEdit toUpdateEdit) {
 
-    private void initComponents(TableModel tableModel) {
-
-        jScrollPane1 = new JScrollPane();
+        JScrollPane jScrollPane1 = new JScrollPane();
         jTable1 = new JTable();
-        jButton1 = new JButton();
-        jButton2 = new JButton();
-        jButton3 = new JButton();
+        JButton jButtonEdit = new JButton();
+        JButton jButtonDelete = new JButton();
+        JButton jButtonAdd = new JButton();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(tableModel);
-        //jTable1.setColumnSelectionAllowed(true);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
 
         jTable1.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        jButton1.setText("Zmień zaznaczony");
+        jButtonEdit.setText("Zmień zaznaczony");
 
-        jButton2.setText("Usuń zaznaczony");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        jButtonDelete.setText("Usuń zaznaczony");
+        jButtonDelete.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                jButton2ActionPerformed(toUpdateEdit);
             }
         });
 
-        jButton3.setText("Dodaj nowy");
+        jButtonAdd.setText("Dodaj nowy");
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -55,9 +57,9 @@ public class SearchAll extends JFrame {
                         .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(111, 111, 111)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButton2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButton3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(jButtonEdit, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButtonDelete, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButtonAdd, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
                                 .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 677, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
@@ -71,20 +73,39 @@ public class SearchAll extends JFrame {
                                                 .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 897, GroupLayout.PREFERRED_SIZE))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(174, 174, 174)
-                                                .addComponent(jButton1)
+                                                .addComponent(jButtonEdit)
                                                 .addGap(102, 102, 102)
-                                                .addComponent(jButton2)
+                                                .addComponent(jButtonDelete)
                                                 .addGap(95, 95, 95)
-                                                .addComponent(jButton3)))
+                                                .addComponent(jButtonAdd)))
                                 .addContainerGap(92, Short.MAX_VALUE))
         );
 
         pack();
     }
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
+    private void jButton2ActionPerformed(ToUpdateEdit toUpdateEdit) {
 
+        switch (toUpdateEdit) {
+            case CAR:
+                new CarDao().deleteCarById("411");
+                jTable1.setModel(new SearchLogic().allCarTable());
+                System.out.println(toUpdateEdit);
+                break;
+
+            case CUSTOMER:
+                new CustomerDao().deleteById(6);
+                jTable1.setModel(new SearchLogic().allCustomerTable());
+
+                break;
+
+            case RENT:
+                System.out.println(toUpdateEdit);
+                break;
+
+
+        }
+        jTable1.repaint();
+    }
 
 }

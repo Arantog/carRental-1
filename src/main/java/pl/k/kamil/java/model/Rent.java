@@ -4,8 +4,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -27,11 +25,20 @@ public class Rent {
     @Column(name = "return_date")
     private LocalDateTime return_date;
 
-    @Column(name = "total")
-    private BigDecimal total;
+    @Column(name = "real_return_date")
+    private LocalDateTime realReturnDate;
+
+    @Column(name = "prise")
+    private BigDecimal price;
 
     @Column(name = "additional_cost")
     private BigDecimal additionalCost;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rent_status")
+    private RentStatus rentStatus;
+
+
 
     @ManyToOne(targetEntity = Car.class)
     private Car car;
@@ -42,15 +49,16 @@ public class Rent {
     public Rent() {
     }
 
-    public Rent(LocalDateTime rent_date, LocalDateTime return_date, BigDecimal total, BigDecimal additionalCost, Car car, Customer customer) {
+    public Rent(LocalDateTime rent_date, LocalDateTime return_date, LocalDateTime realReturnDate, BigDecimal price, BigDecimal additionalCost, RentStatus rentStatus, Car car, Customer customer) {
         this.rent_date = rent_date;
         this.return_date = return_date;
-        this.total = total;
+        this.realReturnDate = realReturnDate;
+        this.price = price;
         this.additionalCost = additionalCost;
+        this.rentStatus = rentStatus;
         this.car = car;
         this.customer = customer;
     }
-
 
     public int getRentId() {
         return rentId;
@@ -76,12 +84,20 @@ public class Rent {
         this.return_date = return_date;
     }
 
-    public BigDecimal getTotal() {
-        return total;
+    public LocalDateTime getRealReturnDate() {
+        return realReturnDate;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public void setRealReturnDate(LocalDateTime realReturnDate) {
+        this.realReturnDate = realReturnDate;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public BigDecimal getAdditionalCost() {
@@ -90,6 +106,14 @@ public class Rent {
 
     public void setAdditionalCost(BigDecimal additionalCost) {
         this.additionalCost = additionalCost;
+    }
+
+    public RentStatus getRentStatus() {
+        return rentStatus;
+    }
+
+    public void setRentStatus(RentStatus rentStatus) {
+        this.rentStatus = rentStatus;
     }
 
     public Car getCar() {
@@ -108,7 +132,6 @@ public class Rent {
         this.customer = customer;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -117,15 +140,17 @@ public class Rent {
         return rentId == rent.rentId &&
                 Objects.equals(rent_date, rent.rent_date) &&
                 Objects.equals(return_date, rent.return_date) &&
-                Objects.equals(total, rent.total) &&
+                Objects.equals(realReturnDate, rent.realReturnDate) &&
+                Objects.equals(price, rent.price) &&
                 Objects.equals(additionalCost, rent.additionalCost) &&
+                rentStatus == rent.rentStatus &&
                 Objects.equals(car, rent.car) &&
                 Objects.equals(customer, rent.customer);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rentId, rent_date, return_date, total, additionalCost, car, customer);
+        return Objects.hash(rentId, rent_date, return_date, realReturnDate, price, additionalCost, rentStatus, car, customer);
     }
 
     @Override
@@ -134,11 +159,12 @@ public class Rent {
                 "rentId=" + rentId +
                 ", rent_date=" + rent_date +
                 ", return_date=" + return_date +
-                ", total=" + total +
+                ", realReturnDate=" + realReturnDate +
+                ", price=" + price +
                 ", additionalCost=" + additionalCost +
+                ", rentStatus=" + rentStatus +
                 ", car=" + car +
                 ", customer=" + customer +
                 '}';
     }
-
 }

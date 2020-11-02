@@ -2,6 +2,7 @@ package pl.k.kamil.java.menu;
 
 import pl.k.kamil.java.dao.CarDao;
 import pl.k.kamil.java.model.Car;
+import pl.k.kamil.java.model.CarStatus;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -76,7 +77,7 @@ public class NewCarMenu {
                 }  else if (!tPrice.getText().chars().allMatch(Character::isDigit)){
                     new ErrorMenu().priceIsNotDigit(tPrice.getText());
                 }else {
-                    new CarDao().add(new Car(tRegNumber.getText(), tMark.getText(), tModel.getText(), tColor.getText(), BigDecimal.valueOf(Long.parseLong(tPrice.getText())), "free"));
+                    new CarDao().add(new Car(tRegNumber.getText(), tMark.getText(), tModel.getText(), tColor.getText(), BigDecimal.valueOf(Long.parseLong(tPrice.getText())), CarStatus.FREE));
                     JOptionPane.showMessageDialog(b, "Dodano samochód  :" + tRegNumber.getText() + " " + tMark.getText());
                     f.dispose();
                 }

@@ -1,5 +1,6 @@
 package pl.k.kamil.java.menu;
 
+import pl.k.kamil.java.logic.ToUpdateEdit;
 import pl.k.kamil.java.logic.SearchLogic;
 
 import javax.swing.*;
@@ -48,7 +49,7 @@ public class SearchMenu extends JFrame {
             rent.setText("Wypożyczenia");
             rent.addActionListener(new ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    rentEditActionPerformed(evt);
+                    rentActionPerformed(evt);
                 }
             });
 
@@ -92,16 +93,16 @@ public class SearchMenu extends JFrame {
 
 
         private void carActionPerformed(ActionEvent evt) {
-            new SearchAll(new SearchLogic().allCarTable()).setVisible(true);
+            new SearchAll(new SearchLogic().allCarTable(), ToUpdateEdit.CAR).setVisible(true);
 
         }
 
         private void customerActionPerformed(ActionEvent evt) {
-            new SearchAll(new SearchLogic().allCustomerTable()).setVisible(true);
+            new SearchAll(new SearchLogic().allCustomerTable(), ToUpdateEdit.CUSTOMER).setVisible(true);
         }
 
-        private void rentEditActionPerformed(ActionEvent evt) {
-            new SearchAll(new SearchLogic().allCarTable()).setVisible(true);
+        private void rentActionPerformed(ActionEvent evt) {
+            new SearchAll(new SearchLogic().allCarTable(), ToUpdateEdit.RENT).setVisible(true);
         }
 
 

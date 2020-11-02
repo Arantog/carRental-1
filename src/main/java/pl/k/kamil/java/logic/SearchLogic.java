@@ -30,9 +30,9 @@ public class SearchLogic {
         List<String[]> values = new ArrayList<String[]>();
         List<Car> cars = new CarDao().findAll();
         for (Car e : cars) {
-            values.add(new String[]{e.getRegNumber(), e.getMark(), e.getModel(), e.getColor(), String.valueOf(e.getPrice())});
+            values.add(new String[]{e.getRegNumber(), e.getMark(), e.getModel(), e.getColor(), String.valueOf(e.getPrice()), String.valueOf(e.getCarStatus())});
         }
-        String[] column = {"Numer rejestracyjny", "Marka", "Model", "Kolor", "cenaza dzień"};
+        String[] column = {"Numer rejestracyjny", "Marka", "Model", "Kolor", "Cena-dzień","Status"};
 
         return new DefaultTableModel(values.toArray(new Object[][]{}), column);
     }

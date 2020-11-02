@@ -1,7 +1,6 @@
 package pl.k.kamil.java.model;
 
 import javax.persistence.*;
-
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -27,20 +26,21 @@ public class Car {
     @Column (name = "price")
     private BigDecimal price;
 
-    @Column (name = "free")
-    private String free;
+    @Column (name = "car_status")
+    @Enumerated(EnumType.STRING)
+    private CarStatus carStatus;
 
 
     public Car() {
     }
 
-    public Car(String regNumber, String mark, String model, String color, BigDecimal price, String free) {
+    public Car(String regNumber, String mark, String model, String color, BigDecimal price, CarStatus carStatus) {
         this.regNumber = regNumber;
         this.mark = mark;
         this.model = model;
         this.color = color;
         this.price = price;
-        this.free = free;
+        this.carStatus = carStatus;
     }
 
     public String getRegNumber() {
@@ -83,12 +83,12 @@ public class Car {
         this.price = price;
     }
 
-    public String getFree() {
-        return free;
+    public CarStatus getCarStatus() {
+        return carStatus;
     }
 
-    public void setFree(String free) {
-        this.free = free;
+    public void setCarStatus(CarStatus carStatus) {
+        this.carStatus = carStatus;
     }
 
     @Override
@@ -101,12 +101,12 @@ public class Car {
                 Objects.equals(model, car.model) &&
                 Objects.equals(color, car.color) &&
                 Objects.equals(price, car.price) &&
-                Objects.equals(free, car.free);
+                carStatus == car.carStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(regNumber, mark, model, color, price, free);
+        return Objects.hash(regNumber, mark, model, color, price, carStatus);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class Car {
                 ", model='" + model + '\'' +
                 ", color='" + color + '\'' +
                 ", price=" + price +
-                ", free='" + free + '\'' +
+                ", carStatus=" + carStatus +
                 '}';
     }
 }
