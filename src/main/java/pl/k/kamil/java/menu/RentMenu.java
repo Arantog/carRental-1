@@ -1,7 +1,5 @@
 package pl.k.kamil.java.menu;
 
-import pl.k.kamil.java.logic.SearchLogic;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -38,11 +36,6 @@ public class RentMenu extends JFrame {
 
     public RentMenu(TableModel carTableModel, TableModel customerTableModel) {
         initComponents(carTableModel, customerTableModel);
-    }
-
-    public static void main(String args[]) {
-
-        new RentMenu((new SearchLogic().allCarTable()), (new SearchLogic().allCustomerTable())).setVisible(true);
     }
 
 
@@ -114,13 +107,14 @@ public class RentMenu extends JFrame {
 
         carTable.setModel(carTableModel);
         carScrollPane.setViewportView(carTable);
-        ListSelectionModel selectcar = carTable.getSelectionModel();
-        selectcar.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                carTableSelectedActionPerformed(carTableModel);
-            }
-        });
+        ListSelectionModel selectCar = carTable.getSelectionModel();
+        selectCar.addListSelectionListener(evt -> carTableSelectedActionPerformed(carTableModel));
+//        selectcar.addListSelectionListener(new ListSelectionListener() {
+//            @Override
+//            public void valueChanged(ListSelectionEvent evt) {
+//                carTableSelectedActionPerformed(carTableModel);
+//            }
+//        });
 
 
         customerTabale.setModel(customerTableModel);
