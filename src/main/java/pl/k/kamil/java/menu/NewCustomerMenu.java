@@ -75,7 +75,6 @@ public class NewCustomerMenu {
                 if (tFirstname.getText().equals("") || tLastName.getText().equals("") || tStreet.getText().equals("") || tCity.getText().equals("") || tHouseNumber.getText().equals("") || tPostalCode.getText().equals("")) {
                     new ErrorMenu().emptyJTextField();
                 } else {
-
                     new CustomerDao().add(new Customer(tFirstname.getText(), tLastName.getText(), tStreet.getText(),
                             tHouseNumber.getText(), tCity.getText(), tPostalCode.getText()));
                     JOptionPane.showMessageDialog(b, "Dodano :" + tFirstname.getText() + " " + tLastName.getText());
