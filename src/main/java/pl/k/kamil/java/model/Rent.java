@@ -4,7 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 
@@ -20,19 +20,22 @@ public class Rent {
     private int rentId;
 
     @Column(name = "rent_date")
-    private LocalDateTime rent_date;
+    private LocalDate rentDate;
 
     @Column(name = "return_date")
-    private LocalDateTime return_date;
+    private LocalDate returnDate;
 
     @Column(name = "real_return_date")
-    private LocalDateTime realReturnDate;
+    private LocalDate realReturnDate;
 
     @Column(name = "prise")
     private BigDecimal price;
 
     @Column(name = "additional_cost")
     private BigDecimal additionalCost;
+
+    @Column(name = "total_prise")
+    private BigDecimal totalPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "rent_status")
@@ -49,12 +52,13 @@ public class Rent {
     public Rent() {
     }
 
-    public Rent(LocalDateTime rent_date, LocalDateTime return_date, LocalDateTime realReturnDate, BigDecimal price, BigDecimal additionalCost, RentStatus rentStatus, Car car, Customer customer) {
-        this.rent_date = rent_date;
-        this.return_date = return_date;
+    public Rent(LocalDate rent_date, LocalDate return_date, LocalDate realReturnDate, BigDecimal price, BigDecimal additionalCost, BigDecimal totalPrice, RentStatus rentStatus, Car car, Customer customer) {
+        this.rentDate = rent_date;
+        this.returnDate = return_date;
         this.realReturnDate = realReturnDate;
         this.price = price;
         this.additionalCost = additionalCost;
+        this.totalPrice = totalPrice;
         this.rentStatus = rentStatus;
         this.car = car;
         this.customer = customer;
@@ -68,27 +72,27 @@ public class Rent {
         this.rentId = rentId;
     }
 
-    public LocalDateTime getRent_date() {
-        return rent_date;
+    public LocalDate getRentDate() {
+        return rentDate;
     }
 
-    public void setRent_date(LocalDateTime rent_date) {
-        this.rent_date = rent_date;
+    public void setRentDate(LocalDate rentDate) {
+        this.rentDate = rentDate;
     }
 
-    public LocalDateTime getReturn_date() {
-        return return_date;
+    public LocalDate getReturnDate() {
+        return returnDate;
     }
 
-    public void setReturn_date(LocalDateTime return_date) {
-        this.return_date = return_date;
+    public void setReturnDate(LocalDate returnDate) {
+        this.returnDate = returnDate;
     }
 
-    public LocalDateTime getRealReturnDate() {
+    public LocalDate getRealReturnDate() {
         return realReturnDate;
     }
 
-    public void setRealReturnDate(LocalDateTime realReturnDate) {
+    public void setRealReturnDate(LocalDate realReturnDate) {
         this.realReturnDate = realReturnDate;
     }
 
@@ -106,6 +110,14 @@ public class Rent {
 
     public void setAdditionalCost(BigDecimal additionalCost) {
         this.additionalCost = additionalCost;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public RentStatus getRentStatus() {
@@ -138,11 +150,12 @@ public class Rent {
         if (o == null || getClass() != o.getClass()) return false;
         Rent rent = (Rent) o;
         return rentId == rent.rentId &&
-                Objects.equals(rent_date, rent.rent_date) &&
-                Objects.equals(return_date, rent.return_date) &&
+                Objects.equals(rentDate, rent.rentDate) &&
+                Objects.equals(returnDate, rent.returnDate) &&
                 Objects.equals(realReturnDate, rent.realReturnDate) &&
                 Objects.equals(price, rent.price) &&
                 Objects.equals(additionalCost, rent.additionalCost) &&
+                Objects.equals(totalPrice, rent.totalPrice) &&
                 rentStatus == rent.rentStatus &&
                 Objects.equals(car, rent.car) &&
                 Objects.equals(customer, rent.customer);
@@ -150,18 +163,19 @@ public class Rent {
 
     @Override
     public int hashCode() {
-        return Objects.hash(rentId, rent_date, return_date, realReturnDate, price, additionalCost, rentStatus, car, customer);
+        return Objects.hash(rentId, rentDate, returnDate, realReturnDate, price, additionalCost, totalPrice, rentStatus, car, customer);
     }
 
     @Override
     public String toString() {
         return "Rent{" +
                 "rentId=" + rentId +
-                ", rent_date=" + rent_date +
-                ", return_date=" + return_date +
+                ", rent_date=" + rentDate +
+                ", return_date=" + returnDate +
                 ", realReturnDate=" + realReturnDate +
                 ", price=" + price +
                 ", additionalCost=" + additionalCost +
+                ", totalPrice=" + totalPrice +
                 ", rentStatus=" + rentStatus +
                 ", car=" + car +
                 ", customer=" + customer +

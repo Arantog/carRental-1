@@ -15,4 +15,17 @@ public class ErrorMenu {
         JOptionPane.showMessageDialog(f, "Pole Cena za dzień : "+price+" - nie jest cyfrą", "Uwaga", JOptionPane.WARNING_MESSAGE);
 
     }
+
+    public  void noCustomersSelected(){
+        JFrame f=new JFrame();
+        JOptionPane.showMessageDialog(f, "Musisz wybrać klienta", "Uwaga", JOptionPane.WARNING_MESSAGE);
+
+    }
+
+    public  void noCarSelected(){
+        JFrame f=new JFrame();
+        JOptionPane.showMessageDialog(f, "Musisz wybrać Samochód", "Uwaga", JOptionPane.WARNING_MESSAGE);
+
+    }
+
 }

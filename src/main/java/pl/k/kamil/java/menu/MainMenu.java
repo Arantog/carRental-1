@@ -1,6 +1,7 @@
 package pl.k.kamil.java.menu;
 
 import pl.k.kamil.java.logic.SearchLogic;
+import pl.k.kamil.java.model.CarStatus;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -90,7 +91,7 @@ public class MainMenu extends JFrame {
 
 
     private void rentActionPerformed(ActionEvent evt) {
-        new RentMenu((new SearchLogic().allCarTable()), (new SearchLogic().allCustomerTable())).setVisible(true);
+       new RentMenu((new SearchLogic().allCarTableByStatus(CarStatus.FREE)), (new SearchLogic().allCustomerTable())).setVisible(true);
     }
 
     private void carReturnActionPerformed(ActionEvent evt) {
@@ -101,7 +102,5 @@ public class MainMenu extends JFrame {
         new SearchMenu().setVisible(true);
     }
 
-//    public static void main(String[] args) {
-//        new MainMenu().setVisible(true);
-//    }
+
 }

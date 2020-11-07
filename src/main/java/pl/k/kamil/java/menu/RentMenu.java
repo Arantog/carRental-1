@@ -1,11 +1,20 @@
 package pl.k.kamil.java.menu;
 
+import pl.k.kamil.java.dao.CarDao;
+import pl.k.kamil.java.dao.CustomerDao;
+import pl.k.kamil.java.dao.RentDao;
+import pl.k.kamil.java.model.*;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 
 public class RentMenu extends JFrame {
 
@@ -28,9 +37,7 @@ public class RentMenu extends JFrame {
     private JTextField tPostalCode;
     private JTextField tRegNumber;
     private JTextField tStreet;
-    private JTextField tTotalPrice;
-    private JTextField jTextFieldID;
-
+   private JTextField jTextFieldID;
 
 
 
@@ -40,8 +47,6 @@ public class RentMenu extends JFrame {
 
 
     private void initComponents(TableModel carTableModel, TableModel customerTableModel) {
-        System.out.println(carTableModel.getColumnName(0));
-        System.out.println(carTableModel.getValueAt(0, 0));
 
         JScrollPane carScrollPane = new JScrollPane();
         carTable = new JTable();
@@ -66,8 +71,8 @@ public class RentMenu extends JFrame {
         JLabel jLabel16 = new JLabel();
         JLabel jLabel17 = new JLabel();
         JLabel jLabel18 = new JLabel();
-        JLabel jLabel19 = new JLabel();
-        JButton jButton1 = new JButton();
+
+        JButton jButtonOk = new JButton();
         JLabel jLabelCusotmerID = new javax.swing.JLabel();
         jTextFieldID = new javax.swing.JTextField();
         tMark = new JTextField();
@@ -80,9 +85,7 @@ public class RentMenu extends JFrame {
         tHouseNumber = new JTextField();
         tPostalCode = new JTextField();
         tCity = new JTextField();
-        tTotalPrice = new JTextField();
-        JLabel jLabel20 = new JLabel();
-        JButton jButton2 = new JButton();
+        //JButton jButton2 = new JButton();
         jDateRentCar = new com.toedter.calendar.JDateChooser();
         jDateReturnCar = new com.toedter.calendar.JDateChooser();
 
@@ -109,12 +112,7 @@ public class RentMenu extends JFrame {
         carScrollPane.setViewportView(carTable);
         ListSelectionModel selectCar = carTable.getSelectionModel();
         selectCar.addListSelectionListener(evt -> carTableSelectedActionPerformed(carTableModel));
-//        selectcar.addListSelectionListener(new ListSelectionListener() {
-//            @Override
-//            public void valueChanged(ListSelectionEvent evt) {
-//                carTableSelectedActionPerformed(carTableModel);
-//            }
-//        });
+
 
 
         customerTabale.setModel(customerTableModel);
@@ -137,7 +135,7 @@ public class RentMenu extends JFrame {
 
         jLabel4.setText("Samochód");
 
-        tTotalPrice.setText("");
+
 
         jLabel5.setText("Numer rejestracyjny:");
 
@@ -167,26 +165,24 @@ public class RentMenu extends JFrame {
 
         jLabel18.setText("Data zwrotu:");
 
-        jLabel19.setText("cena za wypożyczenie:");
 
-        jButton1.setText("Ok");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+        jButtonOk.setText("Ok");
+        jButtonOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonOKActionPerformed(evt);
             }
         });
 
 
 
-        jLabel20.setText("zł");
-
-        jButton2.setText("Odśwież");
-
 
 
         jLabelCusotmerID.setText("ID :");
+        jDateRentCar.setDateFormatString("yyyy-MM-dd");
+        jDateReturnCar.setDateFormatString("yyy-MM-dd");
 
-
+        System.out.println(jDateRentCar.getDate());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -202,17 +198,11 @@ public class RentMenu extends JFrame {
                                                                         .addComponent(jLabel4)
                                                                         .addGroup(layout.createSequentialGroup()
                                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                        .addComponent(jLabel19)
                                                                                         .addComponent(jLabel17)
                                                                                         .addComponent(jLabel18))
-                                                                                .addGap(18, 18, 18)
+                                                                                .addGap(32, 32, 32)
                                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                                        .addGroup(layout.createSequentialGroup()
-                                                                                                .addComponent(tTotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                .addComponent(jLabel20)
-                                                                                                .addGap(0, 81, Short.MAX_VALUE))
-                                                                                        .addComponent(jDateRentCar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                                        .addComponent(jDateRentCar, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
                                                                                         .addComponent(jDateReturnCar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGap(31, 31, 31)
@@ -269,10 +259,8 @@ public class RentMenu extends JFrame {
                                 .addContainerGap())
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(321, 321, 321)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2)
-                                .addGap(90, 90, 90))
+                                .addComponent(jButtonOk, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(90, 564, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -308,7 +296,7 @@ public class RentMenu extends JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(carScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel10)
                                         .addComponent(jLabel2))
@@ -355,24 +343,17 @@ public class RentMenu extends JFrame {
                                                                 .addGap(18, 18, 18)
                                                                 .addComponent(jLabel18))))
                                         .addComponent(customerScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel19)
-                                        .addComponent(tTotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel20))
-                                .addGap(27, 27, 27)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jButton1)
-                                        .addComponent(jButton2))
+                                .addGap(50, 50, 50)
+                                .addComponent(jButtonOk)
                                 .addGap(19, 19, 19))
         );
 
 
-
-        pack();}// </editor-fold>//GEN-END:initComponents
+        pack();
+    }
 
     private void customerTableSelectedActionPerformed(TableModel customerTableModel) {
-        customerSelectedRows =carTable.getSelectedRow();
+        customerSelectedRows = carTable.getSelectedRow();
         jTextFieldID.setText((String) customerTableModel.getValueAt(customerTabale.getSelectedRow(), 0));
         tFirstName.setText((String) customerTableModel.getValueAt(customerTabale.getSelectedRow(), 1));
         tLastName.setText((String) customerTableModel.getValueAt(customerTabale.getSelectedRow(), 2));
@@ -383,7 +364,7 @@ public class RentMenu extends JFrame {
     }
 
     private void carTableSelectedActionPerformed(TableModel carTableModel) {
-        carSelectedRows =carTable.getSelectedRow();
+        carSelectedRows = carTable.getSelectedRow();
         tRegNumber.setText((String) carTableModel.getValueAt(carTable.getSelectedRow(), 0));
         tMark.setText((String) carTableModel.getValueAt(carTable.getSelectedRow(), 1));
         tModel.setText((String) carTableModel.getValueAt(carTable.getSelectedRow(), 2));
@@ -391,18 +372,81 @@ public class RentMenu extends JFrame {
         tPrice.setText((String) carTableModel.getValueAt(carTable.getSelectedRow(), 4));
     }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {
+
+        if (carTable.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(this, "Musisz wybrać Samochód", "Uwaga", JOptionPane.WARNING_MESSAGE);
+        } else if (customerTabale.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(this, "Musisz wybrać klienta", "Uwaga", JOptionPane.WARNING_MESSAGE);
+        } else if (jDateRentCar.getDate() == null ||
+                jDateReturnCar.getDate() == null
+                || jDateReturnCar.getDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate().compareTo(jDateRentCar.getDate().toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()) <= 0) {
+            JOptionPane.showMessageDialog(this, "Daty są niepoprawne", "Uwaga", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+            LocalDate rentCarDate = jDateRentCar.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            LocalDate returnCarDate = jDateReturnCar.getDate().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            System.out.println(rentCarDate);
+            Period period = Period.between(rentCarDate, returnCarDate);
+            BigDecimal totalPrice = BigDecimal.valueOf(Double.parseDouble(tPrice.getText())).multiply(new BigDecimal(period.getDays()));
+            StringBuilder message = new StringBuilder()
+                    .append("Dodano wypożyczenie:\n Samochód:   ")
+                    .append(tRegNumber.getText())
+                    .append(" ")
+                    .append(tModel.getText())
+                    .append("\n Klient:   ")
+                    .append(tFirstName.getText())
+                    .append(" ")
+                    .append(tLastName.getText())
+                    .append("\n Okres:   ")
+                    .append(period.getDays())
+                    .append(" dni x ")
+                    .append(tPrice.getText())
+                    .append(" zł")
+                    .append("\n------------------------------------")
+                    .append("\n cena za wynajem:    ")
+                    .append(totalPrice)
+                    .append("zł");
+            JOptionPane.showMessageDialog(this,message);
+            Car car = new CarDao().findCarById(tRegNumber.getText());
+            Customer customer = new CustomerDao().findCustomerById(Integer.parseInt(jTextFieldID.getText()));
+            car.setCarStatus(CarStatus.RENTED);
+            new RentDao().add(new Rent(rentCarDate,
+                    returnCarDate,
+                    null,
+                    totalPrice,
+                    null,
+                    totalPrice,
+                    RentStatus.ONGOING,
+                    car,
+                    customer));
+            new CarDao().update(car);
+            this.dispose();
+
+
+
+
+
+
+
+
+
+
+        }
+    }
+
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
-
-
-
-
-
 
 
 }
