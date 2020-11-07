@@ -1,84 +1,97 @@
 package pl.k.kamil.java.menu;
 
+import pl.k.kamil.java.dao.CarDao;
 import pl.k.kamil.java.dao.RentDao;
 import pl.k.kamil.java.logic.SearchLogic;
+import pl.k.kamil.java.model.Car;
+import pl.k.kamil.java.model.CarStatus;
 import pl.k.kamil.java.model.Rent;
 import pl.k.kamil.java.model.RentStatus;
 
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableModel;
+import javax.swing.*;
+import javax.swing.event.*;
 
-public class ReturnCarMenu extends javax.swing.JFrame {
+import javax.swing.table.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 
-    // Variables declaration - do not modify
+public class ReturnCarMenu extends JFrame {
 
-    private javax.swing.ButtonGroup buttonGroupCarStatus;
-    private javax.swing.JButton jButtonOk;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabelCarID;
-    private javax.swing.JLabel jLabelCarStatus;
-    private javax.swing.JLabel jLabelCity;
-    private javax.swing.JLabel jLabelColor;
-    private javax.swing.JLabel jLabelCusotmerID;
-    private javax.swing.JLabel jLabelDateRentCar;
-    private javax.swing.JLabel jLabelDateReturnCar;
-    private javax.swing.JLabel jLabelDelayFee;
-    private javax.swing.JLabel jLabelFirstName;
-    private javax.swing.JLabel jLabelLastName;
-    private javax.swing.JLabel jLabelMark;
-    private javax.swing.JLabel jLabelModel;
-    private javax.swing.JLabel jLabelHouseNumber;
-    private javax.swing.JLabel jLabelPostalCode;
-    private javax.swing.JLabel jLabelPrice;
-    private javax.swing.JLabel jLabelRegNumber;
-    private javax.swing.JLabel jLabelStreet;
-    private javax.swing.JLabel jLabelTotalPrice;
-    private javax.swing.JRadioButton jRadioButtonCarStatusDAMAGED;
-    private javax.swing.JRadioButton jRadioButtonCarStatusFree;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableRentedCar;
-    private javax.swing.JTextField jTextFieldDateRentCar;
-    private javax.swing.JTextField jTextFieldDateReturnCar;
-    private javax.swing.JTextField jTextFieldDelayFee;
-    private javax.swing.JTextField jTextFieldID;
-    private javax.swing.JTextField jTextFieldRepairFee;
-    private javax.swing.JTextField jTextFieldTotalPrice;
-    private javax.swing.JTextField tCity;
-    private javax.swing.JTextField tColor;
-    private javax.swing.JTextField tFirstName;
-    private javax.swing.JTextField tHouseNumber;
-    private javax.swing.JTextField tLastName;
-    private javax.swing.JTextField tMark;
-    private javax.swing.JTextField tModel;
-    private javax.swing.JTextField tPostalCode;
-    private javax.swing.JTextField tPrice;
-    private javax.swing.JTextField tRegNumber;
-    private javax.swing.JTextField tStreet;
-    /**
-     * Creates new form ReturnCarMenu
-     */
+
+    private ButtonGroup buttonGroupCarStatus;
+    private JButton jButtonOk;
+    private com.toedter.calendar.JDateChooser jDateChooserRealReturnDate;
+    private JLabel jLabel1;
+    private JLabel jLabel10;
+    private JLabel jLabel19;
+    private JLabel jLabel2;
+    private JLabel jLabel20;
+    private JLabel jLabel21;
+    private JLabel jLabel23;
+    private JLabel jLabel4;
+    private JLabel jLabel5;
+    private JLabel jLabelCarID;
+    private JLabel jLabelCarStatus;
+    private JLabel jLabelCity;
+    private JLabel jLabelColor;
+    private JLabel jLabelCusotmerID;
+    private JLabel jLabelDateRentCar;
+    private JLabel jLabelDateReturnCar;
+    private JLabel jLabelDelayFee;
+    private JLabel jLabelFirstName;
+    private JLabel jLabelLastName;
+    private JLabel jLabelMark;
+    private JLabel jLabelModel;
+    private JLabel jLabelHouseNumber;
+    private JLabel jLabelPostalCode;
+    private JLabel jLabelPrice;
+    private JLabel jLabelRegNumber;
+    private JLabel jLabelStreet;
+    private JLabel jLabelTotalPrice;
+    private JRadioButton jRadioButtonCarStatusDAMAGED;
+    private JRadioButton jRadioButtonCarStatusFree;
+    private JScrollPane jScrollPane1;
+    private JTable jTableRentedCar;
+    private JTextField jTextFieldDateRentCar;
+    private JTextField jTextFieldDateReturnCar;
+    private JTextField jTextFieldDelayFee;
+    private JTextField jTextFieldID;
+    private JTextField jTextFieldRepairFee;
+    private JTextField jTextFieldTotalPrice;
+    private JTextField tCity;
+    private JTextField tColor;
+    private JTextField tFirstName;
+    private JTextField tHouseNumber;
+    private JTextField tLastName;
+    private JTextField tMark;
+    private JTextField tModel;
+    private JTextField tPostalCode;
+    private JTextField tPrice;
+    private JTextField tRegNumber;
+    private JTextField tStreet;
+    private Period delayPeriod;
+    private BigDecimal delayFee = BigDecimal.valueOf(0);
+    private BigDecimal repairFee = BigDecimal.valueOf(0);
+    private BigDecimal totalPrice = BigDecimal.valueOf(0);
+    private BigDecimal rentPrice = BigDecimal.valueOf(0);
+    private CarStatus carStatus = CarStatus.FREE;
+    private Rent rent;
+
+
     public ReturnCarMenu(TableModel rentTableModel) {
         initComponents(rentTableModel);
     }
 
-    /**
-     * @param args the command line arguments
-     */
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ReturnCarMenu(new SearchLogic().allRentTableByStatus(RentStatus.ONGOING)).setVisible(true);
+                new ReturnCarMenu(new SearchLogic().allRentTableByStatus(RentStatus.ACTIVE)).setVisible(true);
             }
         });
     }
@@ -87,60 +100,63 @@ public class ReturnCarMenu extends javax.swing.JFrame {
     private void initComponents(TableModel rentTableModel) {
 
 
-        buttonGroupCarStatus = new javax.swing.ButtonGroup();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTableRentedCar = new javax.swing.JTable();
-        jLabelCarID = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabelRegNumber = new javax.swing.JLabel();
-        jLabelMark = new javax.swing.JLabel();
-        jLabelModel = new javax.swing.JLabel();
-        jLabelColor = new javax.swing.JLabel();
-        jLabelPrice = new javax.swing.JLabel();
-        tPrice = new javax.swing.JTextField();
-        tColor = new javax.swing.JTextField();
-        tModel = new javax.swing.JTextField();
-        tMark = new javax.swing.JTextField();
-        tRegNumber = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jLabelCusotmerID = new javax.swing.JLabel();
-        jLabelFirstName = new javax.swing.JLabel();
-        jLabelLastName = new javax.swing.JLabel();
-        jLabelStreet = new javax.swing.JLabel();
-        jLabelHouseNumber = new javax.swing.JLabel();
-        jLabelPostalCode = new javax.swing.JLabel();
-        jLabelCity = new javax.swing.JLabel();
-        tCity = new javax.swing.JTextField();
-        tPostalCode = new javax.swing.JTextField();
-        tHouseNumber = new javax.swing.JTextField();
-        tStreet = new javax.swing.JTextField();
-        tLastName = new javax.swing.JTextField();
-        tFirstName = new javax.swing.JTextField();
-        jTextFieldID = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jLabel2 = new javax.swing.JLabel();
-        jLabelCarStatus = new javax.swing.JLabel();
-        jLabelDelayFee = new javax.swing.JLabel();
-        jTextFieldDelayFee = new javax.swing.JTextField();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        jTextFieldRepairFee = new javax.swing.JTextField();
-        jLabel21 = new javax.swing.JLabel();
-        jLabelTotalPrice = new javax.swing.JLabel();
-        jTextFieldTotalPrice = new javax.swing.JTextField();
-        jLabel23 = new javax.swing.JLabel();
-        jLabelDateRentCar = new javax.swing.JLabel();
-        jLabelDateReturnCar = new javax.swing.JLabel();
-        jTextFieldDateRentCar = new javax.swing.JTextField();
-        jTextFieldDateReturnCar = new javax.swing.JTextField();
-        jButtonOk = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jRadioButtonCarStatusFree = new javax.swing.JRadioButton();
-        jRadioButtonCarStatusDAMAGED = new javax.swing.JRadioButton();
+        buttonGroupCarStatus = new ButtonGroup();
+        jScrollPane1 = new JScrollPane();
+        jTableRentedCar = new JTable();
+        jLabelCarID = new JLabel();
+        jLabel4 = new JLabel();
+        jLabelRegNumber = new JLabel();
+        jLabelMark = new JLabel();
+        jLabelModel = new JLabel();
+        jLabelColor = new JLabel();
+        jLabelPrice = new JLabel();
+        tPrice = new JTextField();
+        tColor = new JTextField();
+        tModel = new JTextField();
+        tMark = new JTextField();
+        tRegNumber = new JTextField();
+        jLabel10 = new JLabel();
+        jLabelCusotmerID = new JLabel();
+        jLabelFirstName = new JLabel();
+        jLabelLastName = new JLabel();
+        jLabelStreet = new JLabel();
+        jLabelHouseNumber = new JLabel();
+        jLabelPostalCode = new JLabel();
+        jLabelCity = new JLabel();
+        tCity = new JTextField();
+        tPostalCode = new JTextField();
+        tHouseNumber = new JTextField();
+        tStreet = new JTextField();
+        tLastName = new JTextField();
+        tFirstName = new JTextField();
+        jTextFieldID = new JTextField();
+        jLabel1 = new JLabel();
+        jDateChooserRealReturnDate = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new JLabel();
+        jLabelCarStatus = new JLabel();
+        jLabelDelayFee = new JLabel();
+        jTextFieldDelayFee = new JTextField();
+        jLabel19 = new JLabel();
+        jLabel20 = new JLabel();
+        jTextFieldRepairFee = new JTextField();
+        jLabel21 = new JLabel();
+        jLabelTotalPrice = new JLabel();
+        jTextFieldTotalPrice = new JTextField();
+        jLabel23 = new JLabel();
+        jLabelDateRentCar = new JLabel();
+        jLabelDateReturnCar = new JLabel();
+        jTextFieldDateRentCar = new JTextField();
+        jTextFieldDateReturnCar = new JTextField();
+        jButtonOk = new JButton();
+        jLabel5 = new JLabel();
+        jRadioButtonCarStatusFree = new JRadioButton();
+        jRadioButtonCarStatusDAMAGED = new JRadioButton();
         jRadioButtonCarStatusFree.setSelected(true);
         buttonGroupCarStatus.add(jRadioButtonCarStatusFree);
         buttonGroupCarStatus.add(jRadioButtonCarStatusDAMAGED);
+
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Zwrot samochodu");
 
         jTableRentedCar.setModel(rentTableModel);
         jTableRentedCar.getTableHeader().setReorderingAllowed(false);
@@ -158,7 +174,7 @@ public class ReturnCarMenu extends javax.swing.JFrame {
         });
 
         jLabelCarID.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabelCarID.setText("Zwrot samochodu");
+        jLabelCarID.setText("Zwrot samochodu: ");
 
         jLabel4.setText("Samochód");
 
@@ -171,7 +187,6 @@ public class ReturnCarMenu extends javax.swing.JFrame {
         jLabelColor.setText("Kolor:");
 
         jLabelPrice.setText("Cena za dzień: ");
-
 
 
         jLabel10.setText("Wypożyczony przez:");
@@ -191,7 +206,6 @@ public class ReturnCarMenu extends javax.swing.JFrame {
         jLabelCity.setText("Miasto:");
 
 
-
         jLabel1.setText("Wybierz samochód do zwrotu:");
 
         jLabel2.setText("Realna data zwrotu: ");
@@ -201,11 +215,7 @@ public class ReturnCarMenu extends javax.swing.JFrame {
         jLabelDelayFee.setText("Opłata za opóźnienie:");
 
         jTextFieldDelayFee.setText("0");
-        jTextFieldDelayFee.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldDelayFeeActionPerformed(evt);
-            }
-        });
+
 
         jLabel19.setText("zł");
 
@@ -223,17 +233,14 @@ public class ReturnCarMenu extends javax.swing.JFrame {
 
         jLabelTotalPrice.setText("Całkowity koszt wynajmu:");
 
-        jTextFieldTotalPrice.setText("jTextField2");
+        jTextFieldTotalPrice.setText("0");
+        jTextFieldTotalPrice.setFont(new java.awt.Font("Tahoma", 1, 14));
 
         jLabel23.setText("zł");
 
         jLabelDateRentCar.setText("Data wynajęcia:");
 
         jLabelDateReturnCar.setText("Przewidywana data zwrotu:");
-
-        jTextFieldDateRentCar.setText("jTextField3");
-
-        jTextFieldDateReturnCar.setText("jTextField4");
 
         jButtonOk.setText("Ok");
         jButtonOk.addActionListener(new java.awt.event.ActionListener() {
@@ -259,20 +266,48 @@ public class ReturnCarMenu extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        jDateChooserRealReturnDate.setDateFormatString("yyyy-MM-dd");
+        jDateChooserRealReturnDate.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                RealReturnDateActionPerformed(e);
+            }
+        });
+
+        jTextFieldID.setEditable(false);
+        tFirstName.setEditable(false);
+        tLastName.setEditable(false);
+        tStreet.setEditable(false);
+        tHouseNumber.setEditable(false);
+        tPostalCode.setEditable(false);
+        tCity.setEditable(false);
+
+        tRegNumber.setEditable(false);
+        tMark.setEditable(false);
+        tModel.setEditable(false);
+        tColor.setEditable(false);
+        tPrice.setEditable(false);
+        jTextFieldDateRentCar.setEditable(false);
+        jTextFieldDateReturnCar.setEditable(false);
+        jTextFieldRepairFee.setEditable(false);
+        jTextFieldDelayFee.setEditable(false);
+        jTextFieldTotalPrice.setEditable(false);
+
+
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addContainerGap()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addComponent(jLabel4)
                                                         .addComponent(jLabel10)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGap(10, 10, 10)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                                         .addComponent(jLabelMark)
                                                                         .addComponent(jLabelRegNumber)
                                                                         .addComponent(jLabelModel)
@@ -287,7 +322,7 @@ public class ReturnCarMenu extends javax.swing.JFrame {
                                                                         .addComponent(jLabelCity)))))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(20, 20, 20)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addComponent(jLabel2)
                                                         .addComponent(jLabelCarStatus)
                                                         .addComponent(jLabel20)
@@ -295,44 +330,44 @@ public class ReturnCarMenu extends javax.swing.JFrame {
                                                         .addComponent(jLabelTotalPrice)
                                                         .addComponent(jLabelDelayFee)
                                                         .addComponent(jLabelDateReturnCar))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                                                 .addComponent(tFirstName)
                                                                 .addComponent(tLastName)
                                                                 .addComponent(tHouseNumber)
                                                                 .addComponent(tPostalCode)
                                                                 .addComponent(tCity)
-                                                                .addComponent(jTextFieldID, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                                                .addComponent(jTextFieldID, GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                                                                 .addComponent(tRegNumber)
                                                                 .addComponent(tMark)
                                                                 .addComponent(tModel)
                                                                 .addComponent(tColor)
-                                                                .addComponent(tPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                                                                .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                        .addComponent(tStreet, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                .addComponent(tPrice, GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                                                .addComponent(jDateChooserRealReturnDate, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addComponent(tStreet, GroupLayout.PREFERRED_SIZE, 239, GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                                                 .addGroup(layout.createSequentialGroup()
-                                                                        .addComponent(jTextFieldDelayFee, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(jTextFieldDelayFee, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
+                                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                                         .addComponent(jLabel19))
-                                                                .addComponent(jTextFieldDateReturnCar, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                                                .addComponent(jTextFieldDateReturnCar, GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                                                                 .addComponent(jTextFieldDateRentCar)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addComponent(jLabel1)
-                                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 510, GroupLayout.PREFERRED_SIZE))
                                                 .addContainerGap())
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                                        .addComponent(jTextFieldTotalPrice, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                                                                        .addComponent(jTextFieldRepairFee, javax.swing.GroupLayout.Alignment.LEADING))
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                                                        .addComponent(jTextFieldTotalPrice, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                                                                        .addComponent(jTextFieldRepairFee, GroupLayout.Alignment.LEADING))
+                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                                         .addComponent(jLabel21)
                                                                         .addComponent(jLabel23)))
                                                         .addGroup(layout.createSequentialGroup()
@@ -340,120 +375,120 @@ public class ReturnCarMenu extends javax.swing.JFrame {
                                                                 .addGap(18, 18, 18)
                                                                 .addComponent(jRadioButtonCarStatusDAMAGED)))
                                                 .addGap(0, 0, Short.MAX_VALUE))))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonOk, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtonOk, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
                                 .addGap(116, 116, 116))
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(254, 254, 254)
-                                .addComponent(jLabelCarID, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabelCarID, GroupLayout.PREFERRED_SIZE, 154, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
                                         .addGap(107, 107, 107)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, 154, GroupLayout.PREFERRED_SIZE)
                                         .addContainerGap(662, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(113, 113, 113)
                                                 .addComponent(jLabel4)
                                                 .addGap(10, 10, 10)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(tRegNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tRegNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jLabelRegNumber))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelMark)
-                                                        .addComponent(tMark, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tMark, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelModel)
-                                                        .addComponent(tModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tModel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelColor)
-                                                        .addComponent(tColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tColor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelPrice)
-                                                        .addComponent(tPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(tPrice, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(jLabel10)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelCusotmerID)
-                                                        .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jTextFieldID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelFirstName)
-                                                        .addComponent(tFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tFirstName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelLastName)
-                                                        .addComponent(tLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tLastName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelStreet)
-                                                        .addComponent(tStreet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(tStreet, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                 .addGap(1, 1, 1)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelHouseNumber)
-                                                        .addComponent(tHouseNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tHouseNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelPostalCode)
-                                                        .addComponent(tPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tPostalCode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelCity)
-                                                        .addComponent(tCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tCity, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelDateRentCar)
-                                                        .addComponent(jTextFieldDateRentCar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(jTextFieldDateRentCar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                 .addGap(6, 6, 6)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabelDateReturnCar)
-                                                        .addComponent(jTextFieldDateReturnCar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(jTextFieldDateReturnCar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                 .addGap(18, 18, 18)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel2, GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(jDateChooserRealReturnDate, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addContainerGap(31, Short.MAX_VALUE)
                                                 .addComponent(jLabelCarID)
                                                 .addGap(15, 15, 15)
                                                 .addComponent(jLabel1)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 495, GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelDelayFee)
-                                        .addComponent(jTextFieldDelayFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextFieldDelayFee, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel19))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelCarStatus)
                                         .addComponent(jRadioButtonCarStatusFree)
                                         .addComponent(jRadioButtonCarStatusDAMAGED))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel20)
-                                        .addComponent(jTextFieldRepairFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextFieldRepairFee, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel21))
                                 .addGap(24, 24, 24)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelTotalPrice)
-                                        .addComponent(jTextFieldTotalPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextFieldTotalPrice, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel23))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonOk)
                                 .addContainerGap(18, Short.MAX_VALUE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
                                         .addGap(31, 31, 31)
                                         .addComponent(jLabel5)
@@ -461,9 +496,28 @@ public class ReturnCarMenu extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>
+    }
+
+    private void RealReturnDateActionPerformed(PropertyChangeEvent e) {
+        if ("date".equals(e.getPropertyName())) {
+            if (jDateChooserRealReturnDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().compareTo(LocalDate.parse(jTextFieldDateReturnCar.getText())) > 0) {
+                delayPeriod = Period.between(LocalDate.parse(jTextFieldDateReturnCar.getText()), jDateChooserRealReturnDate.getDate().toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate());
+                System.out.println(delayPeriod.getDays());
+                totalPrice = BigDecimal.valueOf(Double.parseDouble(tPrice.getText()));
+                delayFee = BigDecimal.valueOf(Double.parseDouble(tPrice.getText())).multiply(new BigDecimal(delayPeriod.getDays()));
+            } else {
+                delayFee = BigDecimal.valueOf(0);
+            }
+            jTextFieldDelayFee.setText(String.valueOf(delayFee));
+            totalPrice = rentPrice.add(delayFee).add(repairFee);
+            jTextFieldTotalPrice.setText(String.valueOf(totalPrice));
+        }
+    }
+
     private void rentTableSelectedActionPerformed(TableModel rentTableModel) {
-        Rent rent = (Rent) new RentDao().findById(Integer.parseInt((String) rentTableModel.getValueAt(jTableRentedCar.getSelectedRow(), 0)));
+        rent = (Rent) new RentDao().findById(Integer.parseInt((String) rentTableModel.getValueAt(jTableRentedCar.getSelectedRow(), 0)));
         jLabelCarID.setText(rent.getCar().getRegNumber());
         tPrice.setText(String.valueOf(rent.getCar().getPrice()));
         tColor.setText(rent.getCar().getColor());
@@ -479,27 +533,85 @@ public class ReturnCarMenu extends javax.swing.JFrame {
         jTextFieldID.setText(String.valueOf(rent.getCustomer().getId()));
         jTextFieldDateRentCar.setText(String.valueOf(rent.getRentDate()));
         jTextFieldDateReturnCar.setText(String.valueOf(rent.getReturnDate()));
+        rentPrice = rent.getCar().getPrice();
 
     }
 
-    private void jTextFieldDelayFeeActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
 
     private void jTextFieldRepairFeeActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        if (!jTextFieldRepairFee.getText().chars().allMatch(Character::isDigit)) {
+            JOptionPane.showMessageDialog(this, "Pole koszt naprawy nie jest cyfrą", "Uwaga", JOptionPane.WARNING_MESSAGE);
+        } else {
+            repairFee = BigDecimal.valueOf(Double.parseDouble(jTextFieldRepairFee.getText()));
+            totalPrice = rentPrice.add(delayFee).add(repairFee);
+            jTextFieldTotalPrice.setText(String.valueOf(totalPrice));
+
+        }
     }
 
     private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+
+        if (jTableRentedCar.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(this, "Musisz wybrać Samochód do zwrotu", "Uwaga", JOptionPane.WARNING_MESSAGE);
+        } else if (jDateChooserRealReturnDate.getDate() == null ||
+                jDateChooserRealReturnDate.getDate().toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate().compareTo(LocalDate.parse(jTextFieldDateRentCar.getText())) < 0) {
+            JOptionPane.showMessageDialog(this, "Realna data zwrotu jest niepoprawna", "Uwaga", JOptionPane.WARNING_MESSAGE);
+        } else {
+
+
+            rent.setRentStatus(RentStatus.FINISHED);
+            rent.setTotalPrice(totalPrice);
+            rent.setRealReturnDate(jDateChooserRealReturnDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            rent.setAdditionalCost(delayFee.add(repairFee));
+            Car car = rent.getCar();
+            car.setCarStatus(carStatus);
+            StringBuilder message = new StringBuilder()
+                    .append("Oddano samochód:   ")
+                    .append(tRegNumber.getText())
+                    .append("  ")
+                    .append(tModel.getText())
+                    .append("\n")
+                    .append("Opłata za wynajem :           ")
+                    .append(rentPrice)
+                    .append(" zł\n");
+            if (!(delayFee.compareTo(BigDecimal.valueOf(0)) == 0)) {
+                message.append("Opłata za opóźnienie :           ")
+                        .append(delayFee)
+                        .append(" zł\n");
+            }
+            if (!(repairFee.compareTo(BigDecimal.valueOf(0)) == 0)) {
+                message.append("Opłata za uszkodzenia :          ")
+                        .append(repairFee)
+                        .append(" zł\n");
+            }
+            message.append("-------------------------------------------")
+                    .append("\n Całkowity koszt wynajmu:    ")
+                    .append(totalPrice)
+                    .append("zł");
+            JOptionPane.showMessageDialog(this, message);
+
+            new RentDao().update(rent);
+            new CarDao().update(car);
+               this.dispose();
+        }
+
     }
 
     private void jRadioButtonCarStatusDAMAGEDActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        carStatus = CarStatus.DAMAGED;
+        jTextFieldRepairFee.setEditable(true);
     }
 
     private void jRadioButtonCarStatusFreeActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        jTextFieldRepairFee.setText("0");
+        repairFee = BigDecimal.valueOf(Double.parseDouble(jTextFieldRepairFee.getText()));
+        totalPrice = rentPrice.add(delayFee).add(repairFee);
+        jTextFieldTotalPrice.setText(String.valueOf(totalPrice));
+        jTextFieldRepairFee.setEditable(false);
+        carStatus = CarStatus.FREE;
     }
-// End of variables declaration
+
+
 }

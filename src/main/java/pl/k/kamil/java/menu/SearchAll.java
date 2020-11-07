@@ -37,6 +37,8 @@ public class SearchAll extends JFrame {
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
         SelectedRows =jTable1.getSelectedRow();
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Wyszukiwanie / Edycja");
 
         jButtonRefresh.setText("Odśwież");
         jButtonRefresh.addActionListener(evt ->jButtonRefreshActionPerformed(toUpdateEdit));

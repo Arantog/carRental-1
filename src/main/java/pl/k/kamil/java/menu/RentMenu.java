@@ -18,7 +18,7 @@ import java.time.ZoneId;
 
 public class RentMenu extends JFrame {
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+
     private int carSelectedRows;
     private int customerSelectedRows;
 
@@ -394,7 +394,6 @@ public class RentMenu extends JFrame {
             LocalDate returnCarDate = jDateReturnCar.getDate().toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
-            System.out.println(rentCarDate);
             Period period = Period.between(rentCarDate, returnCarDate);
             BigDecimal totalPrice = BigDecimal.valueOf(Double.parseDouble(tPrice.getText())).multiply(new BigDecimal(period.getDays()));
             StringBuilder message = new StringBuilder()
@@ -425,7 +424,7 @@ public class RentMenu extends JFrame {
                     totalPrice,
                     null,
                     totalPrice,
-                    RentStatus.ONGOING,
+                    RentStatus.ACTIVE,
                     car,
                     customer));
             new CarDao().update(car);

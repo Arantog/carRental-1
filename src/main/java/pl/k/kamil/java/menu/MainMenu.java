@@ -2,6 +2,7 @@ package pl.k.kamil.java.menu;
 
 import pl.k.kamil.java.logic.SearchLogic;
 import pl.k.kamil.java.model.CarStatus;
+import pl.k.kamil.java.model.RentStatus;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -95,7 +96,7 @@ public class MainMenu extends JFrame {
     }
 
     private void carReturnActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
+        new ReturnCarMenu(new SearchLogic().allRentTableByStatus(RentStatus.ACTIVE)).setVisible(true);
     }
 
     private void searchEditActionPerformed(ActionEvent evt) {
