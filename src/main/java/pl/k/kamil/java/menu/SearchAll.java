@@ -3,9 +3,16 @@ package pl.k.kamil.java.menu;
 
 import pl.k.kamil.java.dao.CarDao;
 import pl.k.kamil.java.dao.CustomerDao;
+import pl.k.kamil.java.dao.RentDao;
 import pl.k.kamil.java.logic.SearchLogic;
+import pl.k.kamil.java.logic.SearchMenuFunction;
 import pl.k.kamil.java.logic.ToUpdateEdit;
+import pl.k.kamil.java.model.Car;
+import pl.k.kamil.java.model.CarStatus;
+import pl.k.kamil.java.model.Customer;
+import pl.k.kamil.java.model.Rent;
 
+import javax.persistence.PersistenceException;
 import javax.swing.*;
 import javax.swing.table.TableModel;
 
@@ -14,7 +21,8 @@ public class SearchAll extends JFrame {
 
     private JTable jTable1;
     private int SelectedRows;
-    private javax.swing.JButton jButtonRefresh;
+
+    private javax.swing.JButton jButtonSearch;
 
 
     public SearchAll(TableModel tableModel, ToUpdateEdit toUpdateEdit) {
@@ -29,19 +37,20 @@ public class SearchAll extends JFrame {
         JButton jButtonEdit = new JButton();
         JButton jButtonDelete = new JButton();
         JButton jButtonAdd = new JButton();
-        jButtonRefresh = new javax.swing.JButton();
+
+        jButtonSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(tableModel);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
-        SelectedRows =jTable1.getSelectedRow();
+        SelectedRows = jTable1.getSelectedRow();
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Wyszukiwanie / Edycja");
 
-        jButtonRefresh.setText("Odśwież");
-        jButtonRefresh.addActionListener(evt ->jButtonRefreshActionPerformed(toUpdateEdit));
+
+
 
 
         jTable1.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -55,6 +64,11 @@ public class SearchAll extends JFrame {
         jButtonAdd.setText("Dodaj nowy");
         jButtonAdd.addActionListener(evt -> jButtonAddActionPerformed(toUpdateEdit));
 
+        jButtonSearch.setText("Wyszukiwanie");
+        jButtonSearch.addActionListener(evt -> jButtonSearchActionPerformed(toUpdateEdit));
+        jButtonSearch.setVisible(false);
+
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -64,13 +78,14 @@ public class SearchAll extends JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jButtonEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jButtonDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 694, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButtonSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane1)
                                 .addContainerGap())
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonRefresh)
+                                .addContainerGap(1126, Short.MAX_VALUE)
+
                                 .addGap(301, 301, 301))
         );
         layout.setVerticalGroup(
@@ -86,9 +101,11 @@ public class SearchAll extends JFrame {
                                                 .addGap(102, 102, 102)
                                                 .addComponent(jButtonDelete)
                                                 .addGap(95, 95, 95)
-                                                .addComponent(jButtonAdd)))
+                                                .addComponent(jButtonAdd)
+                                                .addGap(75, 75, 75)
+                                                .addComponent(jButtonSearch)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                                .addComponent(jButtonRefresh)
+
                                 .addGap(30, 30, 30))
         );
 
@@ -96,93 +113,100 @@ public class SearchAll extends JFrame {
     }
 
 
-    private void jButtonRefreshActionPerformed(ToUpdateEdit toUpdateEdit) {
-
-        switch (toUpdateEdit) {
-            case CAR:
-
-
-                    jTable1.setModel(new SearchLogic().allCarTable());
-
-                break;
-
-            case CUSTOMER:
-                   jTable1.setModel(new SearchLogic().allCustomerTable());
-
-                break;
-
-            case RENT:
-//
-//                    jTable1.setModel(new SearchLogic().allRentTable());
-                break;
-
-
-        }
-        jTable1.repaint();
-    }
 
 
     private void jButtonDeleteActionPerformed(ToUpdateEdit toUpdateEdit) {
+        try {
 
-        switch (toUpdateEdit) {
-            case CAR:
+            if (jTable1.getSelectedRow() < 0) {
+                JOptionPane.showMessageDialog(this, "Nic nie wybrano!!", "Uwaga", JOptionPane.WARNING_MESSAGE);
+            } else {
 
-                int carOptionsPane=JOptionPane.showConfirmDialog(this,"Czy napewno chcesz usunąć samochód \n o numerze rejestracyjnym :"+(String) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-                if(carOptionsPane==JOptionPane.YES_OPTION){
-                    new CarDao().deleteCarById((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-                jTable1.setModel(new SearchLogic().allCarTable());}
-                System.out.println(toUpdateEdit);
-                break;
+                switch (toUpdateEdit) {
+                    case CAR:
+                        int carOptionsPane = JOptionPane.showConfirmDialog(this, "Czy napewno chcesz usunąć samochód \n o numerze rejestracyjnym :" + jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+                        if (carOptionsPane == JOptionPane.YES_OPTION) {
+                            new CarDao().deleteCarById((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+                            jTable1.setModel(new SearchLogic().allCarTable());
+                        }
+                        System.out.println(toUpdateEdit);
+                        break;
 
-            case CUSTOMER:
-                int customerOptionsPane =JOptionPane.showConfirmDialog(this,"Czy napewno chcesz usunąć klienta:\n"
-                        +(String) jTable1.getValueAt(jTable1.getSelectedRow(), 0) +". "
-                        +jTable1.getValueAt(jTable1.getSelectedRow(), 1)+" "
-                        +jTable1.getValueAt(jTable1.getSelectedRow(), 2) );
+                    case CUSTOMER:
+                        int customerOptionsPane = JOptionPane.showConfirmDialog(this, "Czy napewno chcesz usunąć klienta:\n ID :"
+                                + jTable1.getValueAt(jTable1.getSelectedRow(), 0) + ". "
+                                + jTable1.getValueAt(jTable1.getSelectedRow(), 1) + " "
+                                + jTable1.getValueAt(jTable1.getSelectedRow(), 2));
+                        if (customerOptionsPane == JOptionPane.YES_OPTION) {
+                            new CustomerDao().deleteById(Integer.parseInt((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
+                            jTable1.setModel(new SearchLogic().allCustomerTable());
+                        }
+                        break;
 
-                if(customerOptionsPane ==JOptionPane.YES_OPTION){
-
-
-
-                    new CustomerDao().deleteById(Integer.parseInt((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
-                jTable1.setModel(new SearchLogic().allCustomerTable());}
-
-                break;
-
-            case RENT:
-//                int rentOptionsPane =JOptionPane.showConfirmDialog(this,"Czy napewno chcesz usunąć wypożyczenie samochodu:\n o numerze rejestracyjnym :"
-//                        +(String) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-//
-//                if(rentOptionsPane ==JOptionPane.YES_OPTION){
-//                    new RentDao().deleteById((Integer) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-//                    jTable1.setModel(new SearchLogic().allRentTable());}
-                break;
+                    case RENT:
+                        Rent rent = (Rent) new RentDao().findById(Integer.parseInt((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
+                        if (rent.getCar().getCarStatus() == CarStatus.RENTED) {
+                            JOptionPane.showMessageDialog(this, "Nie możesz edytować trwającego wypożyczenia", "Uwaga", JOptionPane.WARNING_MESSAGE);
+                        } else {
 
 
+                        int rentOptionsPane = JOptionPane.showConfirmDialog(this, "Czy napewno chcesz usunąć wypożyczenie :\n ID: "
+                                + jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+                        if (rentOptionsPane == JOptionPane.YES_OPTION) {
+                            new RentDao().deleteById(Integer.parseInt((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
+                            jTable1.setModel(new SearchLogic().allRentTable());
+                        }}
+                        break;
+                }
+            }
+        } catch (PersistenceException e) {
+            switch (toUpdateEdit) {
+                case CAR:
+                    JOptionPane.showMessageDialog(this, "Nie można usunąć samochodu który był wypożyczany", "Uwaga", JOptionPane.ERROR_MESSAGE);
+                    break;
+                case CUSTOMER:
+                    JOptionPane.showMessageDialog(this, "Nie można usunąć kilenta który wypożyczł samochody.", "Uwaga", JOptionPane.ERROR_MESSAGE);
+                    break;
+            }
         }
         jTable1.repaint();
     }
 
     private void jButtonEditActionPerformed(ToUpdateEdit toUpdateEdit) {
 
-        switch (toUpdateEdit) {
-            case CAR:
-                new CarDao().deleteCarById("411");
-                jTable1.setModel(new SearchLogic().allCarTable());
-                System.out.println(toUpdateEdit);
-                break;
+        if (jTable1.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(this, "Nic nie wybrano!!", "Uwaga", JOptionPane.WARNING_MESSAGE);
+        } else {
+            switch (toUpdateEdit) {
+                case CAR:
 
-            case CUSTOMER:
-                new CustomerDao().deleteById(6);
-                jTable1.setModel(new SearchLogic().allCustomerTable());
-
-                break;
-
-            case RENT:
-                System.out.println(toUpdateEdit);
-                break;
+                    Car car = new CarDao().findCarById((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
+                    this.dispose();
+                    new CarAddUpdateMenu(SearchMenuFunction.EDIT, car).setVisible(true);
 
 
+                    break;
+
+                case CUSTOMER:
+
+                    Customer customer = (Customer) new CustomerDao().findById(Integer.parseInt((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
+                    this.dispose();
+                    new CustomerAddUpdateMenu(SearchMenuFunction.EDIT, customer).setVisible(true);
+
+
+                    break;
+
+                case RENT:
+                    Rent rent = (Rent) new RentDao().findById(Integer.parseInt((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
+                    if (rent.getCar().getCarStatus() == CarStatus.RENTED) {
+                        JOptionPane.showMessageDialog(this, "Nie możesz edytować trwającego wypożyczenia", "Uwaga", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        this.dispose();
+                        new RentCarUpdateMenu(rent).setVisible(true);
+                    }
+                    break;
+
+            }
         }
         jTable1.repaint();
     }
@@ -191,17 +215,16 @@ public class SearchAll extends JFrame {
 
         switch (toUpdateEdit) {
             case CAR:
-                new NewCarMenu().setVisible(true);
-                System.out.println("Zrobione");
-                jTable1.setModel(new SearchLogic().allCarTable());
+                this.dispose();
+                new CarAddUpdateMenu(SearchMenuFunction.ADD).setVisible(true);
                 break;
             case CUSTOMER:
-                new NewCustomerMenu();
-                jTable1.setModel(new SearchLogic().allCustomerTable());
+                this.dispose();
+                new CustomerAddUpdateMenu(SearchMenuFunction.ADD).setVisible(true);
                 break;
 
             case RENT:
-                System.out.println(toUpdateEdit);
+                new RentMenu((new SearchLogic().allCarTableByStatus(CarStatus.FREE)), (new SearchLogic().allCustomerTable())).setVisible(true);
                 break;
 
 
@@ -209,7 +232,22 @@ public class SearchAll extends JFrame {
         jTable1.repaint();
     }
 
+    private void jButtonSearchActionPerformed(ToUpdateEdit toUpdateEdit) {
+        switch (toUpdateEdit) {
+            case CAR:
+                //   new NewCarMenu().setVisible(true);
+                jTable1.setModel(new SearchLogic().allCarTable());
+                break;
+            case CUSTOMER:
+                this.dispose();
+                new CustomerAddUpdateMenu(SearchMenuFunction.SEARCH).setVisible(true);
+                break;
+
+            case RENT:
+                //    new RentMenu((new SearchLogic().allCarTableByStatus(CarStatus.FREE)), (new SearchLogic().allCustomerTable())).setVisible(true);
+                break;
+        }
 
 
-
+    }
 }

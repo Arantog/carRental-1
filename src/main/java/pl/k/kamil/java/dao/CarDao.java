@@ -14,6 +14,10 @@ public class CarDao extends AbstractDao {
         super(Car.class);
     }
 
+
+
+
+
     public Car findCarById(String id) {
         Session session = SessionProvider.getSession();
         Car car = session.find(Car.class, id);

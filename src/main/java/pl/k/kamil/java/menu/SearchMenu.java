@@ -102,7 +102,7 @@ public class SearchMenu extends JFrame {
         }
 
         private void rentActionPerformed(ActionEvent evt) {
-            new SearchAll(new SearchLogic().allCarTable(), ToUpdateEdit.RENT).setVisible(true);
+            new SearchAll(new SearchLogic().allRentTable(), ToUpdateEdit.RENT).setVisible(true);
         }
 
 

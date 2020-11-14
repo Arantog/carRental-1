@@ -2,16 +2,15 @@ package pl.k.kamil.java.menu;
 
 import pl.k.kamil.java.dao.CarDao;
 import pl.k.kamil.java.dao.RentDao;
-import pl.k.kamil.java.logic.SearchLogic;
 import pl.k.kamil.java.model.Car;
 import pl.k.kamil.java.model.CarStatus;
 import pl.k.kamil.java.model.Rent;
 import pl.k.kamil.java.model.RentStatus;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import javax.swing.table.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
@@ -87,14 +86,6 @@ public class ReturnCarMenu extends JFrame {
     }
 
 
-    public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ReturnCarMenu(new SearchLogic().allRentTableByStatus(RentStatus.ACTIVE)).setVisible(true);
-            }
-        });
-    }
 
 
     private void initComponents(TableModel rentTableModel) {
@@ -573,11 +564,11 @@ public class ReturnCarMenu extends JFrame {
                     .append("  ")
                     .append(tModel.getText())
                     .append("\n")
-                    .append("Opłata za wynajem :           ")
+                    .append("Opłata za wynajem :               ")
                     .append(rentPrice)
                     .append(" zł\n");
             if (!(delayFee.compareTo(BigDecimal.valueOf(0)) == 0)) {
-                message.append("Opłata za opóźnienie :           ")
+                message.append("Opłata za opóźnienie :             ")
                         .append(delayFee)
                         .append(" zł\n");
             }
