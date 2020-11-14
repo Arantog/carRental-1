@@ -41,18 +41,7 @@ public class CustomerAddUpdateMenu extends javax.swing.JFrame {
         initComponents(searchMenuFunction,customer);
     }
 
-    public static void main(String args[]) {
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-
-
-                //new CustomerEditAddMenu(SearchMenuFunction.ADD).setVisible(true);
-               new CustomerAddUpdateMenu(SearchMenuFunction.EDIT, (Customer) new CustomerDao().findById(2)).setVisible(true);
-
-            }
-        });
-    }
 
     private void initComponents(SearchMenuFunction searchMenuFunction,Customer customer) {
 

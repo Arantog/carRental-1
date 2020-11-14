@@ -74,14 +74,7 @@ public class RentCarUpdateMenu extends javax.swing.JFrame {
     }
 
 
-    public static void main(String args[]) {
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RentCarUpdateMenu((Rent) new RentDao().findById(2)).setVisible(true);
-            }
-        });
-    }
 
     private void initComponents(Rent rent) {
 

@@ -285,6 +285,8 @@ public class ReturnCarMenu extends JFrame {
         jTextFieldTotalPrice.setEditable(false);
 
 
+
+
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -524,7 +526,9 @@ public class ReturnCarMenu extends JFrame {
         jTextFieldID.setText(String.valueOf(rent.getCustomer().getId()));
         jTextFieldDateRentCar.setText(String.valueOf(rent.getRentDate()));
         jTextFieldDateReturnCar.setText(String.valueOf(rent.getReturnDate()));
-        rentPrice = rent.getCar().getPrice();
+        rentPrice = rent.getPrice();
+        totalPrice=rentPrice;
+        jTextFieldTotalPrice.setText(String.valueOf(rent.getPrice()));
 
     }
 
