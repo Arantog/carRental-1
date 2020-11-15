@@ -1,36 +1,24 @@
 package pl.k.kamil.java.menu;
 
 import pl.k.kamil.java.dao.CustomerDao;
-import pl.k.kamil.java.logic.SearchLogic;
+import pl.k.kamil.java.logic.ListToTableModel;
 import pl.k.kamil.java.logic.SearchMenuFunction;
 import pl.k.kamil.java.logic.ToUpdateEdit;
 import pl.k.kamil.java.model.Customer;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
-public class CustomerAddUpdateMenu extends javax.swing.JFrame {
+public class CustomerAddUpdateMenu extends JFrame {
 
 
-
-    private javax.swing.JButton jButtonAction;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabelStreet;
-    private javax.swing.JLabel jLabelCity;
-    private javax.swing.JLabel jLabelFirstName;
-    private javax.swing.JLabel jLabelHouseNumber;
-    private javax.swing.JLabel jLabelLastName;
-    private javax.swing.JLabel jLabelPostalCode;
-    private javax.swing.JTextField jTextFieldStreet;
-    private javax.swing.JTextField jTextFieldCity;
-    private javax.swing.JTextField jTextFieldFirstName;
-    private javax.swing.JTextField jTextFieldHouseNumber;
-    private javax.swing.JTextField jTextFieldLastName;
-    private javax.swing.JTextField jTextFieldPostalCode;
-    private javax.swing.JLabel jLabelID;
-    private javax.swing.JTextField jTextFieldID;
-
-
+    private JTextField jTextFieldStreet;
+    private JTextField jTextFieldCity;
+    private JTextField jTextFieldFirstName;
+    private JTextField jTextFieldHouseNumber;
+    private JTextField jTextFieldLastName;
+    private JTextField jTextFieldPostalCode;
 
 
     public CustomerAddUpdateMenu(SearchMenuFunction searchMenuFunction) {
@@ -46,28 +34,27 @@ public class CustomerAddUpdateMenu extends javax.swing.JFrame {
     private void initComponents(SearchMenuFunction searchMenuFunction,Customer customer) {
 
 
-
-        jLabel1 = new javax.swing.JLabel();
-        jLabelFirstName = new javax.swing.JLabel();
-        jLabelLastName = new javax.swing.JLabel();
-        jLabelStreet = new javax.swing.JLabel();
-        jLabelHouseNumber = new javax.swing.JLabel();
-        jLabelPostalCode = new javax.swing.JLabel();
-        jLabelCity = new javax.swing.JLabel();
-        jTextFieldFirstName = new javax.swing.JTextField();
-        jTextFieldLastName = new javax.swing.JTextField();
-        jTextFieldStreet = new javax.swing.JTextField();
-        jTextFieldHouseNumber = new javax.swing.JTextField();
-        jTextFieldPostalCode = new javax.swing.JTextField();
-        jTextFieldCity = new javax.swing.JTextField();
-        jButtonAction = new javax.swing.JButton();
-        jLabelID = new javax.swing.JLabel();
-        jTextFieldID = new javax.swing.JTextField();
+        JLabel jLabel1 = new JLabel();
+        JLabel jLabelFirstName = new JLabel();
+        JLabel jLabelLastName = new JLabel();
+        JLabel jLabelStreet = new JLabel();
+        JLabel jLabelHouseNumber = new JLabel();
+        JLabel jLabelPostalCode = new JLabel();
+        JLabel jLabelCity = new JLabel();
+        jTextFieldFirstName = new JTextField();
+        jTextFieldLastName = new JTextField();
+        jTextFieldStreet = new JTextField();
+        jTextFieldHouseNumber = new JTextField();
+        jTextFieldPostalCode = new JTextField();
+        jTextFieldCity = new JTextField();
+        JButton jButtonAction = new JButton();
+        JLabel jLabelID = new JLabel();
+        JTextField jTextFieldID = new JTextField();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
 
         jLabelFirstName.setText("Imię:");
         jLabelLastName.setText("Nazwisko:");
@@ -88,21 +75,21 @@ public class CustomerAddUpdateMenu extends javax.swing.JFrame {
 
 
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jButtonAction)
                                 .addGap(90, 90, 90))
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(108, 108, 108)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 307, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(115, Short.MAX_VALUE))
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(46, 46, 46)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabelFirstName)
                                         .addComponent(jLabelLastName)
                                         .addComponent(jLabelStreet)
@@ -111,7 +98,7 @@ public class CustomerAddUpdateMenu extends javax.swing.JFrame {
                                         .addComponent(jLabelCity)
                                         .addComponent(jLabelID))
                                 .addGap(36, 36, 36)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(jTextFieldCity)
                                         .addComponent(jTextFieldLastName)
                                         .addComponent(jTextFieldStreet)
@@ -122,39 +109,39 @@ public class CustomerAddUpdateMenu extends javax.swing.JFrame {
                                 .addGap(60, 60, 60))
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(41, 41, 41)
                                 .addComponent(jLabel1)
                                 .addGap(29, 29, 29)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                         .addComponent(jLabelID)
-                                        .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelFirstName)
-                                        .addComponent(jTextFieldFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldFirstName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelLastName)
-                                        .addComponent(jTextFieldLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldLastName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelStreet)
-                                        .addComponent(jTextFieldStreet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldStreet, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelHouseNumber)
-                                        .addComponent(jTextFieldHouseNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldHouseNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelPostalCode)
-                                        .addComponent(jTextFieldPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldPostalCode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(22, 22, 22)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelCity)
-                                        .addComponent(jTextFieldCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                                        .addComponent(jTextFieldCity, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
                                 .addComponent(jButtonAction)
                                 .addGap(26, 26, 26))
         );
@@ -202,8 +189,8 @@ public class CustomerAddUpdateMenu extends javax.swing.JFrame {
                             jTextFieldHouseNumber.getText(), jTextFieldCity.getText(), jTextFieldPostalCode.getText()));
                     JOptionPane.showMessageDialog(this, "Dodano :" + jTextFieldFirstName.getText() + " " + jTextFieldLastName.getText());
                     this.dispose();
-                    new SearchAll(new SearchLogic().allCustomerTable(), ToUpdateEdit.CUSTOMER).setVisible(true);
-                };
+                    new SearchAll(new ListToTableModel().allCustomerTable(new CustomerDao().findAll()), ToUpdateEdit.CUSTOMER).setVisible(true);
+                }
                 break;
             case EDIT:
                 if (jTextFieldFirstName.getText().equals("") || jTextFieldLastName.getText().equals("") || jTextFieldStreet.getText().equals("") || jTextFieldCity.getText().equals("") || jTextFieldHouseNumber.getText().equals("") || jTextFieldPostalCode.getText().equals("")) {
@@ -218,7 +205,7 @@ public class CustomerAddUpdateMenu extends javax.swing.JFrame {
                     new CustomerDao().update(customer);
                     JOptionPane.showMessageDialog(this, "Uaktualniono klienta :\n" + jTextFieldFirstName.getText() + " " + jTextFieldLastName.getText(),"Aktualizacja", JOptionPane.INFORMATION_MESSAGE);
                     this.dispose();
-                    new SearchAll(new SearchLogic().allCustomerTable(), ToUpdateEdit.CUSTOMER).setVisible(true);
+                    new SearchAll(new ListToTableModel().allCustomerTable(new CustomerDao().findAll()), ToUpdateEdit.CUSTOMER).setVisible(true);
                 }
 
 
@@ -227,7 +214,7 @@ public class CustomerAddUpdateMenu extends javax.swing.JFrame {
 
                 List<Customer> customers = new CustomerDao().findCustomerByAll(0,"*","*","*","*","*","*");
                 System.out.println(customers);
-                new SearchAll(new SearchLogic().allCustomerListTable(customers), ToUpdateEdit.CUSTOMER).setVisible(true);
+                new SearchAll(new ListToTableModel().allCustomerTable(customers), ToUpdateEdit.CUSTOMER).setVisible(true);
 
                 break;
         }

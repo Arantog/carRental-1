@@ -4,13 +4,10 @@ package pl.k.kamil.java.menu;
 import pl.k.kamil.java.dao.CarDao;
 import pl.k.kamil.java.dao.CustomerDao;
 import pl.k.kamil.java.dao.RentDao;
-import pl.k.kamil.java.logic.SearchLogic;
+import pl.k.kamil.java.logic.ListToTableModel;
 import pl.k.kamil.java.logic.SearchMenuFunction;
 import pl.k.kamil.java.logic.ToUpdateEdit;
-import pl.k.kamil.java.model.Car;
-import pl.k.kamil.java.model.CarStatus;
-import pl.k.kamil.java.model.Customer;
-import pl.k.kamil.java.model.Rent;
+import pl.k.kamil.java.model.*;
 
 import javax.persistence.PersistenceException;
 import javax.swing.*;
@@ -20,9 +17,6 @@ import javax.swing.table.TableModel;
 public class SearchAll extends JFrame {
 
     private JTable jTable1;
-    private int SelectedRows;
-
-    private javax.swing.JButton jButtonSearch;
 
 
     public SearchAll(TableModel tableModel, ToUpdateEdit toUpdateEdit) {
@@ -38,14 +32,13 @@ public class SearchAll extends JFrame {
         JButton jButtonDelete = new JButton();
         JButton jButtonAdd = new JButton();
 
-        jButtonSearch = new javax.swing.JButton();
+        JButton jButtonSearch = new JButton();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(tableModel);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
-        SelectedRows = jTable1.getSelectedRow();
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Wyszukiwanie / Edycja");
 
@@ -69,32 +62,32 @@ public class SearchAll extends JFrame {
         jButtonSearch.setVisible(false);
 
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(111, 111, 111)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jButtonEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButtonDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButtonSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jButtonEdit, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButtonDelete, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButtonAdd, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButtonSearch, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane1)
                                 .addContainerGap())
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(1126, Short.MAX_VALUE)
 
                                 .addGap(301, 301, 301))
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addContainerGap()
-                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 897, GroupLayout.PREFERRED_SIZE))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(174, 174, 174)
                                                 .addComponent(jButtonEdit)
@@ -104,7 +97,7 @@ public class SearchAll extends JFrame {
                                                 .addComponent(jButtonAdd)
                                                 .addGap(75, 75, 75)
                                                 .addComponent(jButtonSearch)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
 
                                 .addGap(30, 30, 30))
         );
@@ -127,7 +120,7 @@ public class SearchAll extends JFrame {
                         int carOptionsPane = JOptionPane.showConfirmDialog(this, "Czy napewno chcesz usunąć samochód \n o numerze rejestracyjnym :" + jTable1.getValueAt(jTable1.getSelectedRow(), 0));
                         if (carOptionsPane == JOptionPane.YES_OPTION) {
                             new CarDao().deleteCarById((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
-                            jTable1.setModel(new SearchLogic().allCarTable());
+                            jTable1.setModel(new ListToTableModel().allCarTable(new CarDao().findAll()));
                         }
                         System.out.println(toUpdateEdit);
                         break;
@@ -139,13 +132,13 @@ public class SearchAll extends JFrame {
                                 + jTable1.getValueAt(jTable1.getSelectedRow(), 2));
                         if (customerOptionsPane == JOptionPane.YES_OPTION) {
                             new CustomerDao().deleteById(Integer.parseInt((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
-                            jTable1.setModel(new SearchLogic().allCustomerTable());
+                            jTable1.setModel(new ListToTableModel().allCustomerTable(new CustomerDao().findAll()));
                         }
                         break;
 
                     case RENT:
                         Rent rent = (Rent) new RentDao().findById(Integer.parseInt((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
-                        if (rent.getCar().getCarStatus() == CarStatus.RENTED) {
+                        if (rent.getRentStatus() == RentStatus.ACTIVE) {
                             JOptionPane.showMessageDialog(this, "Nie możesz edytować trwającego wypożyczenia", "Uwaga", JOptionPane.WARNING_MESSAGE);
                         } else {
 
@@ -154,7 +147,7 @@ public class SearchAll extends JFrame {
                                 + jTable1.getValueAt(jTable1.getSelectedRow(), 0));
                         if (rentOptionsPane == JOptionPane.YES_OPTION) {
                             new RentDao().deleteById(Integer.parseInt((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
-                            jTable1.setModel(new SearchLogic().allRentTable());
+                            jTable1.setModel(new ListToTableModel().allRentTable(new RentDao().findAll()));
                         }}
                         break;
                 }
@@ -198,7 +191,7 @@ public class SearchAll extends JFrame {
 
                 case RENT:
                     Rent rent = (Rent) new RentDao().findById(Integer.parseInt((String) jTable1.getValueAt(jTable1.getSelectedRow(), 0)));
-                    if (rent.getCar().getCarStatus() == CarStatus.RENTED) {
+                    if (rent.getRentStatus() == RentStatus.ACTIVE) {
                         JOptionPane.showMessageDialog(this, "Nie możesz edytować trwającego wypożyczenia", "Uwaga", JOptionPane.WARNING_MESSAGE);
                     } else {
                         this.dispose();
@@ -224,7 +217,7 @@ public class SearchAll extends JFrame {
                 break;
 
             case RENT:
-                new RentMenu((new SearchLogic().allCarTableByStatus(CarStatus.FREE)), (new SearchLogic().allCustomerTable())).setVisible(true);
+                new RentMenu((new ListToTableModel().allCarTableByStatus(CarStatus.FREE)), (new ListToTableModel().allCustomerTable(new CustomerDao().findAll()))).setVisible(true);
                 break;
 
 
@@ -236,7 +229,7 @@ public class SearchAll extends JFrame {
         switch (toUpdateEdit) {
             case CAR:
                 //   new NewCarMenu().setVisible(true);
-                jTable1.setModel(new SearchLogic().allCarTable());
+                jTable1.setModel(new ListToTableModel().allCarTable(new CarDao().findAll()));
                 break;
             case CUSTOMER:
                 this.dispose();

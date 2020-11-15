@@ -15,15 +15,13 @@ public class CarDao extends AbstractDao {
     }
 
 
-
-
-
     public Car findCarById(String id) {
         Session session = SessionProvider.getSession();
         Car car = session.find(Car.class, id);
         session.close();
         return car;
     }
+
     public void deleteCarById(String id) {
         Session session = SessionProvider.getSession();
         Transaction transaction = session.beginTransaction();

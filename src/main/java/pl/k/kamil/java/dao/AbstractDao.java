@@ -46,13 +46,7 @@ public abstract class AbstractDao<T> {
         session.close();
     }
 
-    public void delete(T record) {
-        Session session = SessionProvider.getSession();
-        Transaction transaction = session.beginTransaction();
-        session.delete(record);
-        transaction.commit();
-        session.close();
-    }
+
 
     public void deleteById(int id) {
         Session session = SessionProvider.getSession();

@@ -2,7 +2,7 @@ package pl.k.kamil.java.menu;
 
 import pl.k.kamil.java.dao.CarDao;
 import pl.k.kamil.java.logic.IsNumber;
-import pl.k.kamil.java.logic.SearchLogic;
+import pl.k.kamil.java.logic.ListToTableModel;
 import pl.k.kamil.java.logic.SearchMenuFunction;
 import pl.k.kamil.java.logic.ToUpdateEdit;
 import pl.k.kamil.java.model.Car;
@@ -20,12 +20,6 @@ public class CarAddUpdateMenu extends JFrame{
     private JTextField jTextFieldModel;
     private JTextField jTextFieldPrice;
     private JTextField jTextFieldRegNumber;
-    private javax.swing.ButtonGroup buttonGroupStatus;
-    private javax.swing.JRadioButton jRadioButtonDAMAGED;
-    private javax.swing.JRadioButton jRadioButtonFREE;
-    private javax.swing.JRadioButton jRadioButtonRENTED;
-    private javax.swing.JLabel jLabel1;
-
 
 
     public CarAddUpdateMenu(SearchMenuFunction searchMenuFunction) {
@@ -39,7 +33,7 @@ public class CarAddUpdateMenu extends JFrame{
     private void initComponents(SearchMenuFunction searchMenuFunction,Car car) {
 
 
-        buttonGroupStatus = new javax.swing.ButtonGroup();
+        ButtonGroup buttonGroupStatus = new ButtonGroup();
         JLabel jLabelRegNumber = new JLabel();
         JLabel jLabelMark = new JLabel();
         JLabel jLabelTitle = new JLabel();
@@ -53,15 +47,15 @@ public class CarAddUpdateMenu extends JFrame{
         jTextFieldPrice = new JTextField();
         JButton jButtonAction = new JButton();
         JLabel jLabelCurrency = new JLabel();
-        jRadioButtonFREE = new javax.swing.JRadioButton();
-        jRadioButtonDAMAGED = new javax.swing.JRadioButton();
-        jRadioButtonRENTED = new javax.swing.JRadioButton();
-        jLabel1 = new javax.swing.JLabel();
+        JRadioButton jRadioButtonFREE = new JRadioButton();
+        JRadioButton jRadioButtonDAMAGED = new JRadioButton();
+        JRadioButton jRadioButtonRENTED = new JRadioButton();
+        JLabel jLabel1 = new JLabel();
 
 
         jLabelRegNumber.setText("Numer rejestracyjny : ");
         jLabelMark.setText("Marka:");
-        jLabelTitle.setFont(new Font("Tahoma", 0, 20));
+        jLabelTitle.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
         jLabelModel.setText("Model:");
         jLabelColor.setText("Kolor:");
@@ -76,19 +70,10 @@ public class CarAddUpdateMenu extends JFrame{
 
 
         jRadioButtonFREE.setText("Wolny");
-        jRadioButtonFREE.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                car.setCarStatus(CarStatus.FREE);
-            }
-        });
+        jRadioButtonFREE.addActionListener(evt -> car.setCarStatus(CarStatus.FREE));
 
         jRadioButtonDAMAGED.setText("Uszkodzony");
-        jRadioButtonDAMAGED.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                car.setCarStatus(CarStatus.DAMAGED);
-
-            }
-        });
+        jRadioButtonDAMAGED.addActionListener(evt -> car.setCarStatus(CarStatus.DAMAGED));
 
         jRadioButtonRENTED.setText("Wynajęty");
 
@@ -100,22 +85,22 @@ public class CarAddUpdateMenu extends JFrame{
 
 
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButtonAction)
                                 .addGap(201, 201, 201))
                         .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(199, 199, 199)
                                                 .addComponent(jLabelTitle))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(58, 58, 58)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                         .addComponent(jLabelMark)
                                                         .addComponent(jLabelRegNumber)
                                                         .addComponent(jLabelModel)
@@ -123,56 +108,56 @@ public class CarAddUpdateMenu extends JFrame{
                                                         .addComponent(jLabelPrice)
                                                         .addComponent(jLabel1))
                                                 .addGap(33, 33, 33)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jTextFieldPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(jTextFieldPrice, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                                 .addComponent(jLabelCurrency))
-                                                        .addComponent(jTextFieldMark, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jTextFieldRegNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jTextFieldModel, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jTextFieldColor, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jTextFieldMark, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jTextFieldRegNumber, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jTextFieldModel, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jTextFieldColor, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addComponent(jRadioButtonFREE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                                 .addComponent(jRadioButtonDAMAGED)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                                 .addComponent(jRadioButtonRENTED)))))
                                 .addContainerGap(92, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(22, 22, 22)
                                 .addComponent(jLabelTitle)
                                 .addGap(49, 49, 49)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelRegNumber)
-                                        .addComponent(jTextFieldRegNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldRegNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(24, 24, 24)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelMark)
-                                        .addComponent(jTextFieldMark, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldMark, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelModel)
-                                        .addComponent(jTextFieldModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldModel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(20, 20, 20)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelColor)
-                                        .addComponent(jTextFieldColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jTextFieldColor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabelPrice)
-                                        .addComponent(jTextFieldPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jTextFieldPrice, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabelCurrency))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel1)
                                         .addComponent(jRadioButtonFREE)
                                         .addComponent(jRadioButtonDAMAGED)
                                         .addComponent(jRadioButtonRENTED))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                                 .addComponent(jButtonAction)
                                 .addGap(36, 36, 36))
         );
@@ -207,7 +192,6 @@ public class CarAddUpdateMenu extends JFrame{
                     case DAMAGED:
                         jRadioButtonRENTED.setEnabled(false);
                         jRadioButtonDAMAGED.setSelected(true);
-                        ;
                         break;
                     case RENTED:
                         jRadioButtonFREE.setEnabled(false);
@@ -242,7 +226,7 @@ public class CarAddUpdateMenu extends JFrame{
                         JOptionPane.showMessageDialog(this, "Samochód już istnieje", "Uwaga", JOptionPane.ERROR_MESSAGE);
                     }
                     this.dispose();
-                    new SearchAll(new SearchLogic().allCarTable(), ToUpdateEdit.CAR).setVisible(true);
+                    new SearchAll(new ListToTableModel().allCarTable(new CarDao().findAll()), ToUpdateEdit.CAR).setVisible(true);
                 }
 
                 break;
@@ -265,7 +249,7 @@ public class CarAddUpdateMenu extends JFrame{
                         JOptionPane.showMessageDialog(this, "Samochód już istnieje", "Uwaga", JOptionPane.ERROR_MESSAGE);
                     }
                     this.dispose();
-                    new SearchAll(new SearchLogic().allCarTable(), ToUpdateEdit.CAR).setVisible(true);
+                    new SearchAll(new ListToTableModel().allCarTable(new CarDao().findAll()), ToUpdateEdit.CAR).setVisible(true);
                 }
 
 

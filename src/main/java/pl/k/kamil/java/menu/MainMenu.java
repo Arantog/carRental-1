@@ -1,18 +1,15 @@
 package pl.k.kamil.java.menu;
 
-import pl.k.kamil.java.logic.SearchLogic;
+import pl.k.kamil.java.dao.CustomerDao;
+import pl.k.kamil.java.logic.ListToTableModel;
 import pl.k.kamil.java.model.CarStatus;
 import pl.k.kamil.java.model.RentStatus;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class MainMenu extends JFrame {
-
-    private JButton carReturn;
-    private JLabel jLabelTitle;
-    private JButton rent;
-    private JButton searchEdit;
 
     public MainMenu() {
         initComponents();
@@ -20,38 +17,26 @@ public class MainMenu extends JFrame {
 
     private void initComponents() {
 
-        rent = new JButton();
-        carReturn = new JButton();
-        searchEdit = new JButton();
-        jLabelTitle = new JLabel();
+        JButton rent = new JButton();
+        JButton carReturn = new JButton();
+        JButton searchEdit = new JButton();
+        JLabel jLabelTitle = new JLabel();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         setTitle("Wypożyczalnia samochodów");
-        jLabelTitle.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabelTitle.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 24)); // NOI18N
         jLabelTitle.setText("Wypożyczalnia samochodów");
 
 
         rent.setText("Nowe wypożyczenie");
-        rent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rentActionPerformed(evt);
-            }
-        });
+        rent.addActionListener(this::rentActionPerformed);
 
         carReturn.setText("Zwrot");
-        carReturn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                carReturnActionPerformed(evt);
-            }
-        });
+        carReturn.addActionListener(this::carReturnActionPerformed);
 
         searchEdit.setText("Edycja / Wyszukiwanie");
-        searchEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchEditActionPerformed(evt);
-            }
-        });
+        searchEdit.addActionListener(this::searchEditActionPerformed);
 
 
 
@@ -92,11 +77,11 @@ public class MainMenu extends JFrame {
 
 
     private void rentActionPerformed(ActionEvent evt) {
-       new RentMenu((new SearchLogic().allCarTableByStatus(CarStatus.FREE)), (new SearchLogic().allCustomerTable())).setVisible(true);
+       new RentMenu((new ListToTableModel().allCarTableByStatus(CarStatus.FREE)), (new ListToTableModel().allCustomerTable(new CustomerDao().findAll()))).setVisible(true);
     }
 
     private void carReturnActionPerformed(ActionEvent evt) {
-        new ReturnCarMenu(new SearchLogic().allRentTableByStatus(RentStatus.ACTIVE)).setVisible(true);
+        new ReturnCarMenu(new ListToTableModel().allRentTableByStatus(RentStatus.ACTIVE)).setVisible(true);
     }
 
     private void searchEditActionPerformed(ActionEvent evt) {

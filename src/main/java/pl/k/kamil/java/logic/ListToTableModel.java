@@ -1,7 +1,6 @@
 package pl.k.kamil.java.logic;
 
 import pl.k.kamil.java.dao.CarDao;
-import pl.k.kamil.java.dao.CustomerDao;
 import pl.k.kamil.java.dao.RentDao;
 import pl.k.kamil.java.model.*;
 
@@ -10,14 +9,13 @@ import javax.swing.table.TableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchLogic {
+public class ListToTableModel {
 
 
-    public TableModel allCustomerTable() {
+    public TableModel allCustomerTable(List<Customer> customers) {
 
-        List<String[]> values = new ArrayList<String[]>();
-        List<Customer> customers = new CustomerDao().findAll();
-        for (Customer e : customers) {
+        List<String[]> values = new ArrayList<>();
+       for (Customer e : customers) {
             values.add(new String[]{String.valueOf(e.getId()), e.getFirstName(), e.getLastName(), e.getStreet(), e.getHouseNumber(), e.getPostalCode(), e.getCity()});
         }
         String[] column = {"ID", "Imię", "Nazwisko", "Ulica", "Numer domu", "Kod pocztowy", "Miasto"};
@@ -25,11 +23,13 @@ public class SearchLogic {
         return new DefaultTableModel(values.toArray(new Object[][]{}), column);
     }
 
-    public TableModel allCarTable() {
 
-        List<String[]> values = new ArrayList<String[]>();
-        List<Car> cars = new CarDao().findAll();
-        for (Car e : cars) {
+
+
+    public TableModel allCarTable(List<Car> cars) {
+
+        List<String[]> values = new ArrayList<>();
+            for (Car e : cars) {
             values.add(new String[]{e.getRegNumber(), e.getMark(), e.getModel(), e.getColor(), String.valueOf(e.getPrice()), String.valueOf(e.getCarStatus())});
         }
         String[] column = {"Numer rejestracyjny", "Marka", "Model", "Kolor", "Cena-dzień", "Status"};
@@ -37,9 +37,12 @@ public class SearchLogic {
         return new DefaultTableModel(values.toArray(new Object[][]{}), column);
     }
 
+
+
+
     public TableModel allCarTableByStatus(CarStatus carStatus) {
 
-        List<String[]> values = new ArrayList<String[]>();
+        List<String[]> values = new ArrayList<>();
         List<Car> cars = new CarDao().findAllCarByStatus(carStatus);
         for (Car e : cars) {
             values.add(new String[]{e.getRegNumber(), e.getMark(), e.getModel(), e.getColor(), String.valueOf(e.getPrice()), String.valueOf(e.getCarStatus())});
@@ -49,9 +52,12 @@ public class SearchLogic {
         return new DefaultTableModel(values.toArray(new Object[][]{}), column);
     }
 
+
+
+
     public TableModel allRentTableByStatus(RentStatus rentStatus) {
 
-        List<String[]> values = new ArrayList<String[]>();
+        List<String[]> values = new ArrayList<>();
         List<Rent> rents = new RentDao().findAllRentByStatus(rentStatus);
         for (Rent e : rents) {
             values.add(new String[]{String.valueOf(e.getRentId()), e.getCar().getRegNumber(), e.getCar().getMark(), String.valueOf(e.getCustomer().getId()), e.getCustomer().getFirstName(), e.getCustomer().getLastName(), String.valueOf(e.getRentDate())});
@@ -61,11 +67,14 @@ public class SearchLogic {
         return new DefaultTableModel(values.toArray(new Object[][]{}), column);
     }
 
-    public TableModel allRentTable() {
 
-        List<String[]> values = new ArrayList<String[]>();
-        List<Rent> rents = new RentDao().findAll();
-        for (Rent e : rents) {
+
+
+
+    public TableModel allRentTable(List<Rent> rents) {
+
+        List<String[]> values = new ArrayList<>();
+         for (Rent e : rents) {
             values.add(new String[]{String.valueOf(e.getRentId()),
                     e.getCar().getRegNumber(),
                     e.getCar().getMark(),
@@ -85,15 +94,5 @@ public class SearchLogic {
         return new DefaultTableModel(values.toArray(new Object[][]{}), column);
     }
 
-    public TableModel allCustomerListTable(List<Customer> customers) {
 
-        List<String[]> values = new ArrayList<String[]>();
-      //  List<Customer> customers = new CustomerDao().findAll();
-        for (Customer e : customers) {
-            values.add(new String[]{String.valueOf(e.getId()), e.getFirstName(), e.getLastName(), e.getStreet(), e.getHouseNumber(), e.getPostalCode(), e.getCity()});
-        }
-        String[] column = {"ID", "Imię", "Nazwisko", "Ulica", "Numer domu", "Kod pocztowy", "Miasto"};
-
-        return new DefaultTableModel(values.toArray(new Object[][]{}), column);
-    }
 }

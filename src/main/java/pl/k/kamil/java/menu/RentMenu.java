@@ -3,24 +3,18 @@ package pl.k.kamil.java.menu;
 import pl.k.kamil.java.dao.CarDao;
 import pl.k.kamil.java.dao.CustomerDao;
 import pl.k.kamil.java.dao.RentDao;
+import pl.k.kamil.java.logic.DateConvert;
 import pl.k.kamil.java.model.*;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.ZoneId;
 
 public class RentMenu extends JFrame {
 
-
-    private int carSelectedRows;
-    private int customerSelectedRows;
 
     private com.toedter.calendar.JDateChooser jDateRentCar;
     private com.toedter.calendar.JDateChooser jDateReturnCar;
@@ -37,8 +31,7 @@ public class RentMenu extends JFrame {
     private JTextField tPostalCode;
     private JTextField tRegNumber;
     private JTextField tStreet;
-   private JTextField jTextFieldID;
-
+    private JTextField jTextFieldID;
 
 
     public RentMenu(TableModel carTableModel, TableModel customerTableModel) {
@@ -73,8 +66,8 @@ public class RentMenu extends JFrame {
         JLabel jLabel18 = new JLabel();
 
         JButton jButtonOk = new JButton();
-        JLabel jLabelCusotmerID = new javax.swing.JLabel();
-        jTextFieldID = new javax.swing.JTextField();
+        JLabel jLabelCustomerID = new JLabel();
+        jTextFieldID = new JTextField();
         tMark = new JTextField();
         tModel = new JTextField();
         tColor = new JTextField();
@@ -114,143 +107,106 @@ public class RentMenu extends JFrame {
         selectCar.addListSelectionListener(evt -> carTableSelectedActionPerformed(carTableModel));
 
 
-
         customerTabale.setModel(customerTableModel);
         customerScrollPane2.setViewportView(customerTabale);
-        customerTabale.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                customerTableSelectedActionPerformed(customerTableModel);
-
-
-            }
-        });
+        customerTabale.getSelectionModel().addListSelectionListener(evt -> customerTableSelectedActionPerformed(customerTableModel));
 
         jLabel1.setText("Wybierz samochód");
-
         jLabel2.setText("Wybierz klienta");
-
-        jLabel3.setFont(new Font("Tahoma", 0, 18));
+        jLabel3.setFont(new Font("Tahoma", Font.PLAIN, 18));
         jLabel3.setText("Nowe wypożyczenie");
-
         jLabel4.setText("Samochód");
-
-
-
         jLabel5.setText("Numer rejestracyjny:");
-
         jLabel6.setText("Marka :");
-
         jLabel7.setText("Model:");
-
         jLabel8.setText("Kolor:");
-
         jLabel9.setText("Cena za dzień: ");
-
         jLabel10.setText("Wypożyczony przez:");
-
         jLabel11.setText("Imię:");
-
         jLabel12.setText("Nazwisko:");
-
         jLabel13.setText("Ulica:");
-
         jLabel14.setText("Numer domu:");
-
         jLabel15.setText("Kod pocztowy:");
-
         jLabel16.setText("Miasto:");
-
         jLabel17.setText("Data wypożyczenia:");
-
         jLabel18.setText("Data zwrotu:");
-
-
+        jLabelCustomerID.setText("ID :");
 
         jButtonOk.setText("Ok");
-        jButtonOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                jButtonOKActionPerformed(evt);
-            }
-        });
+        jButtonOk.addActionListener(this::jButtonOKActionPerformed);
 
 
-
-
-
-        jLabelCusotmerID.setText("ID :");
         jDateRentCar.setDateFormatString("yyyy-MM-dd");
         jDateReturnCar.setDateFormatString("yyy-MM-dd");
 
-        System.out.println(jDateRentCar.getDate());
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addContainerGap()
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                                         .addComponent(jLabel4)
                                                                         .addGroup(layout.createSequentialGroup()
-                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                                                         .addComponent(jLabel17)
                                                                                         .addComponent(jLabel18))
                                                                                 .addGap(32, 32, 32)
-                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                                        .addComponent(jDateRentCar, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                                                                                        .addComponent(jDateReturnCar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                                                        .addComponent(jDateRentCar, GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                                                                                        .addComponent(jDateReturnCar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addGap(31, 31, 31)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                                         .addComponent(jLabel10)
                                                                         .addGroup(layout.createSequentialGroup()
-                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                                                         .addComponent(jLabel11)
                                                                                         .addComponent(jLabel14)
                                                                                         .addComponent(jLabel15)
                                                                                         .addComponent(jLabel16)
                                                                                         .addComponent(jLabel12)
                                                                                         .addComponent(jLabel13)
-                                                                                        .addComponent(jLabelCusotmerID))
+                                                                                        .addComponent(jLabelCustomerID))
                                                                                 .addGap(18, 18, 18)
-                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                                                                         .addComponent(tFirstName)
                                                                                         .addComponent(tLastName)
                                                                                         .addComponent(tStreet)
                                                                                         .addComponent(tHouseNumber)
-                                                                                        .addComponent(tPostalCode, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                                                                        .addComponent(tPostalCode, GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                                                                                         .addComponent(tCity)
                                                                                         .addComponent(jTextFieldID)))))
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                                 .addGap(14, 14, 14)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                                         .addComponent(jLabel5)
                                                                         .addComponent(jLabel6)
                                                                         .addComponent(jLabel7)
                                                                         .addComponent(jLabel8)
                                                                         .addComponent(jLabel9))
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                        .addComponent(tRegNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                                        .addComponent(tRegNumber, GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
                                                                         .addComponent(tMark)
                                                                         .addComponent(tModel)
                                                                         .addComponent(tColor)
                                                                         .addComponent(tPrice))))
                                                 .addGap(50, 50, 50)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(carScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(carScrollPane, GroupLayout.DEFAULT_SIZE, 521, Short.MAX_VALUE)
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(jLabel2, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
                                                                 .addGap(0, 0, Short.MAX_VALUE))
                                                         .addComponent(customerScrollPane2)))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(35, 35, 35)
-                                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 297, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, Short.MAX_VALUE))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(419, 419, 419)
@@ -259,90 +215,90 @@ public class RentMenu extends JFrame {
                                 .addContainerGap())
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(321, 321, 321)
-                                .addComponent(jButtonOk, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButtonOk, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
                                 .addGap(90, 564, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
                                 .addComponent(jLabel3)
                                 .addGap(45, 45, 45)
                                 .addComponent(jLabel1)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(39, 39, 39)
                                                 .addComponent(jLabel4)
                                                 .addGap(10, 10, 10)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(tRegNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tRegNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(jLabel5))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel6)
-                                                        .addComponent(tMark, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tMark, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel7)
-                                                        .addComponent(tModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tModel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel8)
-                                                        .addComponent(tColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tColor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel9)
-                                                        .addComponent(tPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addComponent(tPrice, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(carScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(carScrollPane, GroupLayout.PREFERRED_SIZE, 336, GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(jLabel10)
                                         .addComponent(jLabel2))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(10, 10, 10)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(jLabelCusotmerID)
-                                                        .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jLabelCustomerID)
+                                                        .addComponent(jTextFieldID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(tFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(tFirstName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                                 .addGap(6, 6, 6)
-                                                                .addComponent(tLastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addComponent(tLastName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addComponent(jLabel11)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                                 .addComponent(jLabel12)))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(tStreet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(tHouseNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(tStreet, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel13, GroupLayout.Alignment.TRAILING))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(tHouseNumber, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel14, GroupLayout.Alignment.TRAILING))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addComponent(jLabel15)
-                                                        .addComponent(tPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(tPostalCode, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                         .addComponent(jLabel16)
-                                                        .addComponent(tCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(tCity, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                 .addGap(123, 123, 123)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jDateReturnCar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                        .addComponent(jDateRentCar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jDateReturnCar, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel17, GroupLayout.Alignment.TRAILING)
+                                                                        .addComponent(jDateRentCar, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                                 .addGap(18, 18, 18)
                                                                 .addComponent(jLabel18))))
-                                        .addComponent(customerScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(customerScrollPane2, GroupLayout.PREFERRED_SIZE, 371, GroupLayout.PREFERRED_SIZE))
                                 .addGap(50, 50, 50)
                                 .addComponent(jButtonOk)
                                 .addGap(19, 19, 19))
@@ -353,7 +309,6 @@ public class RentMenu extends JFrame {
     }
 
     private void customerTableSelectedActionPerformed(TableModel customerTableModel) {
-        customerSelectedRows = carTable.getSelectedRow();
         jTextFieldID.setText((String) customerTableModel.getValueAt(customerTabale.getSelectedRow(), 0));
         tFirstName.setText((String) customerTableModel.getValueAt(customerTabale.getSelectedRow(), 1));
         tLastName.setText((String) customerTableModel.getValueAt(customerTabale.getSelectedRow(), 2));
@@ -364,7 +319,6 @@ public class RentMenu extends JFrame {
     }
 
     private void carTableSelectedActionPerformed(TableModel carTableModel) {
-        carSelectedRows = carTable.getSelectedRow();
         tRegNumber.setText((String) carTableModel.getValueAt(carTable.getSelectedRow(), 0));
         tMark.setText((String) carTableModel.getValueAt(carTable.getSelectedRow(), 1));
         tModel.setText((String) carTableModel.getValueAt(carTable.getSelectedRow(), 2));
@@ -380,20 +334,12 @@ public class RentMenu extends JFrame {
             JOptionPane.showMessageDialog(this, "Musisz wybrać klienta", "Uwaga", JOptionPane.WARNING_MESSAGE);
         } else if (jDateRentCar.getDate() == null ||
                 jDateReturnCar.getDate() == null
-                || jDateReturnCar.getDate().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate().compareTo(jDateRentCar.getDate().toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate()) <= 0) {
+                || DateConvert.convertToLocalDate(jDateReturnCar.getDate()).compareTo(DateConvert.convertToLocalDate(jDateRentCar.getDate())) <= 0) {
             JOptionPane.showMessageDialog(this, "Daty są niepoprawne", "Uwaga", JOptionPane.WARNING_MESSAGE);
         } else {
 
-            LocalDate rentCarDate = jDateRentCar.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
-            LocalDate returnCarDate = jDateReturnCar.getDate().toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate();
+            LocalDate rentCarDate = DateConvert.convertToLocalDate(jDateRentCar.getDate());
+            LocalDate returnCarDate = DateConvert.convertToLocalDate(jDateReturnCar.getDate());
             Period period = Period.between(rentCarDate, returnCarDate);
             BigDecimal totalPrice = BigDecimal.valueOf(Double.parseDouble(tPrice.getText())).multiply(new BigDecimal(period.getDays()));
             StringBuilder message = new StringBuilder()
@@ -414,9 +360,9 @@ public class RentMenu extends JFrame {
                     .append("\n cena za wynajem:    ")
                     .append(totalPrice)
                     .append("zł");
-            JOptionPane.showMessageDialog(this,message);
+            JOptionPane.showMessageDialog(this, message);
             Car car = new CarDao().findCarById(tRegNumber.getText());
-            Customer customer = new CustomerDao().findCustomerById(Integer.parseInt(jTextFieldID.getText()));
+            Customer customer = (Customer) new CustomerDao().findById(Integer.parseInt(jTextFieldID.getText()));
             car.setCarStatus(CarStatus.RENTED);
             new RentDao().add(new Rent(rentCarDate,
                     returnCarDate,
@@ -431,21 +377,8 @@ public class RentMenu extends JFrame {
             this.dispose();
 
 
-
-
-
-
-
-
-
-
         }
     }
-
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
 
 }

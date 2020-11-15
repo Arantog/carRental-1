@@ -12,12 +12,6 @@ public class CustomerDao extends AbstractDao{
         super(Customer.class);
 
     }
-    public Customer findCustomerById(int id) {
-        Session session = SessionProvider.getSession();
-        Customer record = session.find(Customer.class, id);
-        session.close();
-        return record;
-    }
 
     public List<Customer> findCustomerByAll(int id,String firstName, String lastName, String street, String houseNumber, String city, String postalCode) {
         Session session = SessionProvider.getSession();

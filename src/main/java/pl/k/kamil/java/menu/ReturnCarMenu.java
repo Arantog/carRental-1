@@ -1,59 +1,27 @@
 package pl.k.kamil.java.menu;
 
+import com.toedter.calendar.JDateChooser;
 import pl.k.kamil.java.dao.CarDao;
 import pl.k.kamil.java.dao.RentDao;
+import pl.k.kamil.java.logic.DateConvert;
 import pl.k.kamil.java.model.Car;
 import pl.k.kamil.java.model.CarStatus;
 import pl.k.kamil.java.model.Rent;
 import pl.k.kamil.java.model.RentStatus;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.ZoneId;
 
 public class ReturnCarMenu extends JFrame {
 
 
-    private ButtonGroup buttonGroupCarStatus;
-    private JButton jButtonOk;
-    private com.toedter.calendar.JDateChooser jDateChooserRealReturnDate;
-    private JLabel jLabel1;
-    private JLabel jLabel10;
-    private JLabel jLabel19;
-    private JLabel jLabel2;
-    private JLabel jLabel20;
-    private JLabel jLabel21;
-    private JLabel jLabel23;
-    private JLabel jLabel4;
-    private JLabel jLabel5;
+    private JDateChooser jDateChooserRealReturnDate;
     private JLabel jLabelCarID;
-    private JLabel jLabelCarStatus;
-    private JLabel jLabelCity;
-    private JLabel jLabelColor;
-    private JLabel jLabelCusotmerID;
-    private JLabel jLabelDateRentCar;
-    private JLabel jLabelDateReturnCar;
-    private JLabel jLabelDelayFee;
-    private JLabel jLabelFirstName;
-    private JLabel jLabelLastName;
-    private JLabel jLabelMark;
-    private JLabel jLabelModel;
-    private JLabel jLabelHouseNumber;
-    private JLabel jLabelPostalCode;
-    private JLabel jLabelPrice;
-    private JLabel jLabelRegNumber;
-    private JLabel jLabelStreet;
-    private JLabel jLabelTotalPrice;
-    private JRadioButton jRadioButtonCarStatusDAMAGED;
-    private JRadioButton jRadioButtonCarStatusFree;
-    private JScrollPane jScrollPane1;
     private JTable jTableRentedCar;
     private JTextField jTextFieldDateRentCar;
     private JTextField jTextFieldDateReturnCar;
@@ -72,7 +40,6 @@ public class ReturnCarMenu extends JFrame {
     private JTextField tPrice;
     private JTextField tRegNumber;
     private JTextField tStreet;
-    private Period delayPeriod;
     private BigDecimal delayFee = BigDecimal.valueOf(0);
     private BigDecimal repairFee = BigDecimal.valueOf(0);
     private BigDecimal totalPrice = BigDecimal.valueOf(0);
@@ -86,34 +53,32 @@ public class ReturnCarMenu extends JFrame {
     }
 
 
-
-
     private void initComponents(TableModel rentTableModel) {
 
 
-        buttonGroupCarStatus = new ButtonGroup();
-        jScrollPane1 = new JScrollPane();
+        ButtonGroup buttonGroupCarStatus = new ButtonGroup();
+        JScrollPane jScrollPane1 = new JScrollPane();
         jTableRentedCar = new JTable();
         jLabelCarID = new JLabel();
-        jLabel4 = new JLabel();
-        jLabelRegNumber = new JLabel();
-        jLabelMark = new JLabel();
-        jLabelModel = new JLabel();
-        jLabelColor = new JLabel();
-        jLabelPrice = new JLabel();
+        JLabel jLabel4 = new JLabel();
+        JLabel jLabelRegNumber = new JLabel();
+        JLabel jLabelMark = new JLabel();
+        JLabel jLabelModel = new JLabel();
+        JLabel jLabelColor = new JLabel();
+        JLabel jLabelPrice = new JLabel();
         tPrice = new JTextField();
         tColor = new JTextField();
         tModel = new JTextField();
         tMark = new JTextField();
         tRegNumber = new JTextField();
-        jLabel10 = new JLabel();
-        jLabelCusotmerID = new JLabel();
-        jLabelFirstName = new JLabel();
-        jLabelLastName = new JLabel();
-        jLabelStreet = new JLabel();
-        jLabelHouseNumber = new JLabel();
-        jLabelPostalCode = new JLabel();
-        jLabelCity = new JLabel();
+        JLabel jLabel10 = new JLabel();
+        JLabel jLabelCustomerID = new JLabel();
+        JLabel jLabelFirstName = new JLabel();
+        JLabel jLabelLastName = new JLabel();
+        JLabel jLabelStreet = new JLabel();
+        JLabel jLabelHouseNumber = new JLabel();
+        JLabel jLabelPostalCode = new JLabel();
+        JLabel jLabelCity = new JLabel();
         tCity = new JTextField();
         tPostalCode = new JTextField();
         tHouseNumber = new JTextField();
@@ -121,27 +86,27 @@ public class ReturnCarMenu extends JFrame {
         tLastName = new JTextField();
         tFirstName = new JTextField();
         jTextFieldID = new JTextField();
-        jLabel1 = new JLabel();
+        JLabel jLabel1 = new JLabel();
         jDateChooserRealReturnDate = new com.toedter.calendar.JDateChooser();
-        jLabel2 = new JLabel();
-        jLabelCarStatus = new JLabel();
-        jLabelDelayFee = new JLabel();
+        JLabel jLabel2 = new JLabel();
+        JLabel jLabelCarStatus = new JLabel();
+        JLabel jLabelDelayFee = new JLabel();
         jTextFieldDelayFee = new JTextField();
-        jLabel19 = new JLabel();
-        jLabel20 = new JLabel();
+        JLabel jLabel19 = new JLabel();
+        JLabel jLabel20 = new JLabel();
         jTextFieldRepairFee = new JTextField();
-        jLabel21 = new JLabel();
-        jLabelTotalPrice = new JLabel();
+        JLabel jLabel21 = new JLabel();
+        JLabel jLabelTotalPrice = new JLabel();
         jTextFieldTotalPrice = new JTextField();
-        jLabel23 = new JLabel();
-        jLabelDateRentCar = new JLabel();
-        jLabelDateReturnCar = new JLabel();
+        JLabel jLabel23 = new JLabel();
+        JLabel jLabelDateRentCar = new JLabel();
+        JLabel jLabelDateReturnCar = new JLabel();
         jTextFieldDateRentCar = new JTextField();
         jTextFieldDateReturnCar = new JTextField();
-        jButtonOk = new JButton();
-        jLabel5 = new JLabel();
-        jRadioButtonCarStatusFree = new JRadioButton();
-        jRadioButtonCarStatusDAMAGED = new JRadioButton();
+        JButton jButtonOk = new JButton();
+        JLabel jLabel5 = new JLabel();
+        JRadioButton jRadioButtonCarStatusFree = new JRadioButton();
+        JRadioButton jRadioButtonCarStatusDAMAGED = new JRadioButton();
         jRadioButtonCarStatusFree.setSelected(true);
         buttonGroupCarStatus.add(jRadioButtonCarStatusFree);
         buttonGroupCarStatus.add(jRadioButtonCarStatusDAMAGED);
@@ -155,16 +120,9 @@ public class ReturnCarMenu extends JFrame {
             jTableRentedCar.getColumnModel().getColumn(0).setPreferredWidth(30);
         }
         jScrollPane1.setViewportView(jTableRentedCar);
-        jTableRentedCar.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                rentTableSelectedActionPerformed(rentTableModel);
+        jTableRentedCar.getSelectionModel().addListSelectionListener(evt -> rentTableSelectedActionPerformed(rentTableModel));
 
-
-            }
-        });
-
-        jLabelCarID.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelCarID.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18));
         jLabelCarID.setText("Zwrot samochodu: ");
 
         jLabel4.setText("Samochód");
@@ -182,7 +140,7 @@ public class ReturnCarMenu extends JFrame {
 
         jLabel10.setText("Wypożyczony przez:");
 
-        jLabelCusotmerID.setText("ID :");
+        jLabelCustomerID.setText("ID :");
 
         jLabelFirstName.setText("Imię:");
 
@@ -213,11 +171,7 @@ public class ReturnCarMenu extends JFrame {
         jLabel20.setText("Koszty naprawy:");
 
         jTextFieldRepairFee.setText("0");
-        jTextFieldRepairFee.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldRepairFeeActionPerformed(evt);
-            }
-        });
+        jTextFieldRepairFee.addActionListener(this::jTextFieldRepairFeeActionPerformed);
 
 
         jLabel21.setText("zł");
@@ -225,7 +179,7 @@ public class ReturnCarMenu extends JFrame {
         jLabelTotalPrice.setText("Całkowity koszt wynajmu:");
 
         jTextFieldTotalPrice.setText("0");
-        jTextFieldTotalPrice.setFont(new java.awt.Font("Tahoma", 1, 14));
+        jTextFieldTotalPrice.setFont(new java.awt.Font("Tahoma", Font.BOLD, 14));
 
         jLabel23.setText("zł");
 
@@ -234,36 +188,19 @@ public class ReturnCarMenu extends JFrame {
         jLabelDateReturnCar.setText("Przewidywana data zwrotu:");
 
         jButtonOk.setText("Ok");
-        jButtonOk.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonOkActionPerformed(evt);
-            }
-        });
+        jButtonOk.addActionListener(this::jButtonOkActionPerformed);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 18)); // NOI18N
         jLabel5.setText("Zwrot samochodu");
 
         jRadioButtonCarStatusFree.setText("Sprawny");
-        jRadioButtonCarStatusFree.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonCarStatusFreeActionPerformed(evt);
-            }
-        });
+        jRadioButtonCarStatusFree.addActionListener(this::jRadioButtonCarStatusFreeActionPerformed);
 
         jRadioButtonCarStatusDAMAGED.setText("Uszkodzony");
-        jRadioButtonCarStatusDAMAGED.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonCarStatusDAMAGEDActionPerformed(evt);
-            }
-        });
+        jRadioButtonCarStatusDAMAGED.addActionListener(this::jRadioButtonCarStatusDAMAGEDActionPerformed);
 
         jDateChooserRealReturnDate.setDateFormatString("yyyy-MM-dd");
-        jDateChooserRealReturnDate.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                RealReturnDateActionPerformed(e);
-            }
-        });
+        jDateChooserRealReturnDate.getDateEditor().addPropertyChangeListener(this::RealReturnDateActionPerformed);
 
         jTextFieldID.setEditable(false);
         tFirstName.setEditable(false);
@@ -285,8 +222,6 @@ public class ReturnCarMenu extends JFrame {
         jTextFieldTotalPrice.setEditable(false);
 
 
-
-
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -306,7 +241,7 @@ public class ReturnCarMenu extends JFrame {
                                                                         .addComponent(jLabelModel)
                                                                         .addComponent(jLabelColor)
                                                                         .addComponent(jLabelPrice)
-                                                                        .addComponent(jLabelCusotmerID)
+                                                                        .addComponent(jLabelCustomerID)
                                                                         .addComponent(jLabelFirstName)
                                                                         .addComponent(jLabelLastName)
                                                                         .addComponent(jLabelStreet)
@@ -413,7 +348,7 @@ public class ReturnCarMenu extends JFrame {
                                                 .addComponent(jLabel10)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(jLabelCusotmerID)
+                                                        .addComponent(jLabelCustomerID)
                                                         .addComponent(jTextFieldID, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -493,10 +428,8 @@ public class ReturnCarMenu extends JFrame {
 
     private void RealReturnDateActionPerformed(PropertyChangeEvent e) {
         if ("date".equals(e.getPropertyName())) {
-            if (jDateChooserRealReturnDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().compareTo(LocalDate.parse(jTextFieldDateReturnCar.getText())) > 0) {
-                delayPeriod = Period.between(LocalDate.parse(jTextFieldDateReturnCar.getText()), jDateChooserRealReturnDate.getDate().toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate());
+            if (DateConvert.convertToLocalDate(jDateChooserRealReturnDate.getDate()).compareTo(LocalDate.parse(jTextFieldDateReturnCar.getText())) > 0) {
+                Period delayPeriod = Period.between(LocalDate.parse(jTextFieldDateReturnCar.getText()), DateConvert.convertToLocalDate(jDateChooserRealReturnDate.getDate()));
                 System.out.println(delayPeriod.getDays());
                 totalPrice = BigDecimal.valueOf(Double.parseDouble(tPrice.getText()));
                 delayFee = BigDecimal.valueOf(Double.parseDouble(tPrice.getText())).multiply(new BigDecimal(delayPeriod.getDays()));
@@ -527,7 +460,7 @@ public class ReturnCarMenu extends JFrame {
         jTextFieldDateRentCar.setText(String.valueOf(rent.getRentDate()));
         jTextFieldDateReturnCar.setText(String.valueOf(rent.getReturnDate()));
         rentPrice = rent.getPrice();
-        totalPrice=rentPrice;
+        totalPrice = rentPrice;
         jTextFieldTotalPrice.setText(String.valueOf(rent.getPrice()));
 
     }
@@ -549,16 +482,14 @@ public class ReturnCarMenu extends JFrame {
         if (jTableRentedCar.getSelectedRow() < 0) {
             JOptionPane.showMessageDialog(this, "Musisz wybrać Samochód do zwrotu", "Uwaga", JOptionPane.WARNING_MESSAGE);
         } else if (jDateChooserRealReturnDate.getDate() == null ||
-                jDateChooserRealReturnDate.getDate().toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate().compareTo(LocalDate.parse(jTextFieldDateRentCar.getText())) < 0) {
+                DateConvert.convertToLocalDate(jDateChooserRealReturnDate.getDate()).compareTo(LocalDate.parse(jTextFieldDateRentCar.getText())) < 0) {
             JOptionPane.showMessageDialog(this, "Realna data zwrotu jest niepoprawna", "Uwaga", JOptionPane.WARNING_MESSAGE);
         } else {
 
 
             rent.setRentStatus(RentStatus.FINISHED);
             rent.setTotalPrice(totalPrice);
-            rent.setRealReturnDate(jDateChooserRealReturnDate.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            rent.setRealReturnDate(DateConvert.convertToLocalDate(jDateChooserRealReturnDate.getDate()));
             rent.setAdditionalCost(delayFee.add(repairFee));
             Car car = rent.getCar();
             car.setCarStatus(carStatus);
@@ -586,10 +517,9 @@ public class ReturnCarMenu extends JFrame {
                     .append(totalPrice)
                     .append("zł");
             JOptionPane.showMessageDialog(this, message);
-
             new RentDao().update(rent);
             new CarDao().update(car);
-               this.dispose();
+            this.dispose();
         }
 
     }
